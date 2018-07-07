@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.leon.lfilepickerlibrary.LFilePicker;
+import com.leon.lfilepickerlibrary.utils.Constant;
 import com.xiaojiutect.wifitransfer.FileBean;
 import com.xiaojiutect.wifitransfer.utils.FileUtils;
 import com.xiaojiutect.wifitransfer.utils.Md5Util;
@@ -23,6 +25,7 @@ import com.xiaojiutect.wifitransfer.utils.Md5Util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -96,7 +99,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_chosefile:
-                chooseFile();
+                selectFile();
                 break;
             case R.id.btn_connectserver:
                 mDialog = new AlertDialog.Builder(this, R.style.Transparent).create();
@@ -186,6 +189,10 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         startActivityForResult(intent, 10);
     }
 
+    private void selectFile(){
+        new LFilePicker().withActivity(SendFileActivity.this).withRequestCode(10).withTitle("多选想要发送的文件").withMutilyMode(true).start();
+    }
+
     /**
      * 客户端选择文件回调
      */
@@ -194,22 +201,26 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10) {
             if (resultCode == RESULT_OK) {
-                Uri uri = data.getData();
-                if (uri != null) {
-                    String path = FileUtils.getAbsolutePath(this, uri);
-                    if (path != null) {
-                        final File file = new File(path);
-                        if (!file.exists() || mWifiP2pInfo == null) {
-                            Log.i(TAG,"FILE exist ? "+file.exists());
-                            Toast.makeText(SendFileActivity.this,"文件路径找不到", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        String md5 = Md5Util.getMd5(file);
-                        FileBean fileBean = new FileBean(file.getPath(), file.length(), md5,FileUtils.getFileNameByPath(file.getPath()),1,1);
-                        String hostAddress = mWifiP2pInfo.groupOwnerAddress.getHostAddress();
-                        new SendTask(SendFileActivity.this, fileBean).execute(hostAddress);
-                    }
-                }
+//                Uri uri = data.getData();
+//                if (uri != null) {
+//                    String path = FileUtils.getAbsolutePath(this, uri);
+//                    if (path != null) {
+//                        final File file = new File(path);
+//                        if (!file.exists() || mWifiP2pInfo == null) {
+//                            Log.i(TAG,"FILE exist ? "+file.exists());
+//                            Toast.makeText(SendFileActivity.this,"文件路径找不到", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                        String md5 = Md5Util.getMd5(file);
+//                        FileBean fileBean = new FileBean(file.getPath(), file.length(), md5,FileUtils.getFileNameByPath(file.getPath()),1,1);
+//                        String hostAddress = mWifiP2pInfo.groupOwnerAddress.getHostAddress();
+//                        new SendTask(SendFileActivity.this, fileBean).execute(hostAddress);
+//                    }
+//                }
+
+                    List<String> list = data.getStringArrayListExtra("paths");
+                    Toast.makeText(getApplicationContext(), "选中了" + list.size() + "个文件", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
