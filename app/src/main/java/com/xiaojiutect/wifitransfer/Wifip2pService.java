@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.xiaojiutect.wifitransfer.socket.NewReceiveSocket;
 import com.xiaojiutect.wifitransfer.socket.ReceiveSocket;
 
 
@@ -19,7 +20,7 @@ import com.xiaojiutect.wifitransfer.socket.ReceiveSocket;
 public class Wifip2pService extends IntentService {
 
     private static final String TAG = "Wifip2pService";
-    private ReceiveSocket mReceiveSocket;
+    private NewReceiveSocket mReceiveSocket;
 
     public Wifip2pService() {
         super("Wifip2pService");
@@ -36,7 +37,7 @@ public class Wifip2pService extends IntentService {
         public MyBinder() {
             super();
         }
-        public void initListener(ReceiveSocket.ProgressReceiveListener listener){
+        public void initListener(NewReceiveSocket.ProgressReceiveListener listener){
             mReceiveSocket.setOnProgressReceiveListener(listener);
         }
     }
@@ -49,7 +50,7 @@ public class Wifip2pService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mReceiveSocket = new ReceiveSocket();
+        mReceiveSocket = new NewReceiveSocket();
         mReceiveSocket.createServerSocket();
         Log.e(TAG, "传输完毕");
     }

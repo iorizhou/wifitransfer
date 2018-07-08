@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.xiaojiutect.wifitransfer.ProgressDialog;
 import com.xiaojiutect.wifitransfer.Wifip2pService;
+import com.xiaojiutect.wifitransfer.socket.NewReceiveSocket;
 import com.xiaojiutect.wifitransfer.socket.ReceiveSocket;
 
 import java.io.File;
@@ -30,7 +31,7 @@ import com.xiaojiutect.wifitransfer.utils.AlertDialogUtil;
  * 2、移除组群信息
  * 3、启动服务，创建serversocket，监听客户端端口，把信息写入文件
  */
-public class ReceiveFileActivity extends BaseActivity implements ReceiveSocket.ProgressReceiveListener, View.OnClickListener {
+public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocket.ProgressReceiveListener, View.OnClickListener {
 
     private static final String TAG = "ReceiveFileActivity";
     private Wifip2pService.MyBinder mBinder;

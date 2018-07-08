@@ -8,6 +8,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -201,25 +202,33 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10) {
             if (resultCode == RESULT_OK) {
-//                Uri uri = data.getData();
-//                if (uri != null) {
-//                    String path = FileUtils.getAbsolutePath(this, uri);
-//                    if (path != null) {
-//                        final File file = new File(path);
-//                        if (!file.exists() || mWifiP2pInfo == null) {
-//                            Log.i(TAG,"FILE exist ? "+file.exists());
-//                            Toast.makeText(SendFileActivity.this,"文件路径找不到", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        String md5 = Md5Util.getMd5(file);
-//                        FileBean fileBean = new FileBean(file.getPath(), file.length(), md5,FileUtils.getFileNameByPath(file.getPath()),1,1);
-//                        String hostAddress = mWifiP2pInfo.groupOwnerAddress.getHostAddress();
-//                        new SendTask(SendFileActivity.this, fileBean).execute(hostAddress);
-//                    }
-//                }
-
-                    List<String> list = data.getStringArrayListExtra("paths");
-                    Toast.makeText(getApplicationContext(), "选中了" + list.size() + "个文件", Toast.LENGTH_SHORT).show();
+                List<String> list = data.getStringArrayListExtra("paths");
+                if (list==null||list.size()==0){
+                    Toast.makeText(SendFileActivity.this,"你未选择任何文件",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (mWifiP2pInfo == null||mWifiP2pInfo.groupOwnerAddress==null||TextUtils.isEmpty(mWifiP2pInfo.groupOwnerAddress.getHostAddress())){
+                    Toast.makeText(SendFileActivity.this,"未发现可用设备，请确保两台手机连接至同一个Wifi网络",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                List<FileBean> fileBeanList = new ArrayList<>();
+                for (String path : list){
+                    if (!TextUtils.isEmpty(path)) {
+                        final File file = new File(path);
+                        if (!file.exists()) {
+                            continue;
+                        }else {
+                            String md5 = Md5Util.getMd5(file);
+                            FileBean fileBean = new FileBean(file.getPath(), file.length(), md5,FileUtils.getFileNameByPath(file.getPath()),1,1);
+                            fileBeanList.add(fileBean);
+                        }
+                    }
+                }
+                if (fileBeanList.size()<=0){
+                    Toast.makeText(SendFileActivity.this,"文件不存在或错误，请检查并重试",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                new NewSendTask(SendFileActivity.this, fileBeanList).execute(mWifiP2pInfo.groupOwnerAddress.getHostAddress());
 
             }
         }
