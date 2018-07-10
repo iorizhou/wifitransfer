@@ -170,7 +170,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
     public void onProgressChanged(File file, int progress,Boolean mShowErrorTip) {
         Log.e(TAG, "接收进度：" + progress);
         mProgressDialog.setProgress(progress);
-        mProgressDialog.setProgressText(progress + "%");
+        mProgressDialog.setProgressText("当前接收文件 : "+file.getName() +" \n接收进度: "+progress + "%");
     }
 
     @Override

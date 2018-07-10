@@ -53,7 +53,7 @@ public class NewSendTask extends AsyncTask<String, Integer, Void> implements New
 
     @Override
     public void onProgressChanged(File file, int progress) {
-        Log.e(TAG, "发送进度：" + progress);
+        Log.e(TAG, "当前发送文件 : "+file.getName()+"\n发送进度：" + progress);
         mProgressDialog.setProgress(progress);
         mProgressDialog.setProgressText(progress + "%");;
     }

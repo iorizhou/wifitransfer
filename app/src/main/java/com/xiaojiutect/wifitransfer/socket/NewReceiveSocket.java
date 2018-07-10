@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.xiaojiutect.wifitransfer.FileBean;
 import com.xiaojiutect.wifitransfer.TaskBean;
+import com.xiaojiutect.wifitransfer.TransferInfoBean;
 import com.xiaojiutect.wifitransfer.utils.FileUtils;
 import com.xiaojiutect.wifitransfer.utils.Md5Util;
 
@@ -96,7 +97,7 @@ public class NewReceiveSocket {
                 mFileOutputStream = new FileOutputStream(mFile);
                 //开始接收文件
                 mHandler.sendEmptyMessage(40);
-                byte bytes[] = new byte[1024];
+                byte bytes[] = new byte[1024*1024];
                 int len;
                 long total = 0;
                 int progress;
@@ -104,9 +105,10 @@ public class NewReceiveSocket {
                     mFileOutputStream.write(bytes, 0, len);
                     total += len;
                     progress = (int) ((total * 100) / fileBean.fileLength);
-                    Log.e(TAG, "文件接收进度: " + progress);
+//                    Log.e(TAG, "文件接收进度: " + progress);
                     Message message = Message.obtain();
                     message.what = 50;
+//                    TransferInfoBean infoBean = new TransferInfoBean(progress,name,fileBean.index,fileBean.totalCount);
                     message.obj = progress;
                     mHandler.sendMessage(message);
                 }

@@ -75,7 +75,7 @@ public class NewSendSocket {
             FileInputStream inputStream = new FileInputStream(mFile);
             long size = fileBean.fileLength;
             long total = 0;
-            byte bytes[] = new byte[1024];
+            byte bytes[] = new byte[1024*1024];
             int len;
             while ((len = inputStream.read(bytes)) != -1) {
                 outputStream.write(bytes, 0, len);

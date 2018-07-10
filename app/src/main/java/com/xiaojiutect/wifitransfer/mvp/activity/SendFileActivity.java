@@ -7,6 +7,8 @@ import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,6 +53,30 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     private Timer mTimer;
     private TimerTask mTimerTask;
     Button mBtnConnectServer;
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    if (mDialog!=null && mDialog.isShowing()){
+                        mDialog.dismiss();
+                        mDialog = null;
+                    }
+                    List<FileBean> fileBeanList = (List<FileBean>)msg.obj;
+                    if (fileBeanList.size()<=0){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(SendFileActivity.this,"文件不存在或错误，请检查并重试",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return;
+                    }
+                    new NewSendTask(SendFileActivity.this, fileBeanList).execute(mWifiP2pInfo.groupOwnerAddress.getHostAddress());
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,10 +129,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                 selectFile();
                 break;
             case R.id.btn_connectserver:
-                mDialog = new AlertDialog.Builder(this, R.style.Transparent).create();
-                mDialog.show();
-                mDialog.setCancelable(false);
-                mDialog.setContentView(R.layout.loading_progressba);
+                showProgressDialog();
                 //搜索设备
                 connectServer();
                 break;
@@ -114,6 +137,13 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                 break;
 
         }
+    }
+
+    private void showProgressDialog(){
+        mDialog = new AlertDialog.Builder(this, R.style.Transparent).create();
+        mDialog.show();
+        mDialog.setCancelable(false);
+        mDialog.setContentView(R.layout.loading_progressba);
     }
 
     /**
@@ -194,6 +224,31 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         new LFilePicker().withActivity(SendFileActivity.this).withRequestCode(10).withTitle("多选想要发送的文件").withMutilyMode(true).start();
     }
 
+    private void handleFileSelect(final List<String> list){
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               List<FileBean> fileBeanList = new ArrayList<>();
+               for (String path : list){
+                   if (!TextUtils.isEmpty(path)) {
+                       final File file = new File(path);
+                       if (!file.exists()) {
+                           continue;
+                       }else {
+                           String md5 = Md5Util.getMd5(file);
+                           FileBean fileBean = new FileBean(file.getPath(), file.length(), md5,FileUtils.getFileNameByPath(file.getPath()),1,1);
+                           fileBeanList.add(fileBean);
+                       }
+                   }
+               }
+               Message msg = mHandler.obtainMessage();
+               msg.what = 0;
+               msg.obj = fileBeanList;
+               mHandler.sendMessage(msg);
+           }
+       }).start();
+    }
+
     /**
      * 客户端选择文件回调
      */
@@ -211,25 +266,8 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                     Toast.makeText(SendFileActivity.this,"未发现可用设备，请确保两台手机连接至同一个Wifi网络",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                List<FileBean> fileBeanList = new ArrayList<>();
-                for (String path : list){
-                    if (!TextUtils.isEmpty(path)) {
-                        final File file = new File(path);
-                        if (!file.exists()) {
-                            continue;
-                        }else {
-                            String md5 = Md5Util.getMd5(file);
-                            FileBean fileBean = new FileBean(file.getPath(), file.length(), md5,FileUtils.getFileNameByPath(file.getPath()),1,1);
-                            fileBeanList.add(fileBean);
-                        }
-                    }
-                }
-                if (fileBeanList.size()<=0){
-                    Toast.makeText(SendFileActivity.this,"文件不存在或错误，请检查并重试",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                new NewSendTask(SendFileActivity.this, fileBeanList).execute(mWifiP2pInfo.groupOwnerAddress.getHostAddress());
-
+                showProgressDialog();
+                handleFileSelect(list);
             }
         }
     }
