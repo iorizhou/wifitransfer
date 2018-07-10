@@ -43,8 +43,10 @@ public class NewSendTask extends AsyncTask<String, Integer, Void> implements New
 
     @Override
     protected Void doInBackground(String... strings) {
-        mSendSocket = new NewSendSocket(mFileBeanList, strings[0], this);
-        mSendSocket.createSendSocket();
+        for (FileBean fileBean : mFileBeanList){
+            mSendSocket = new NewSendSocket(mFileBeanList, strings[0], this);
+            mSendSocket.sendFile(fileBean);
+        }
         return null;
     }
 

@@ -63,6 +63,43 @@ public class NewSendSocket {
     }
 
 
+    public void sendFile(FileBean fileBean){
+        try {
+            Socket socket = new Socket();
+            InetSocketAddress inetSocketAddress = new InetSocketAddress(mAddress, PORT);
+            socket.connect(inetSocketAddress);
+            OutputStream outputStream = socket.getOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(fileBean);
+            mFile = new File(fileBean.filePath);
+            FileInputStream inputStream = new FileInputStream(mFile);
+            long size = fileBean.fileLength;
+            long total = 0;
+            byte bytes[] = new byte[1024];
+            int len;
+            while ((len = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, len);
+                total += len;
+                int progress = (int) ((total * 100) / size);
+                Log.e(TAG, "文件发送进度：" + progress);
+                Message message = Message.obtain();
+                message.what = 10;
+                message.obj = progress;
+                mHandler.sendMessage(message);
+            }
+            outputStream.close();
+            objectOutputStream.close();
+            inputStream.close();
+            socket.close();
+            mHandler.sendEmptyMessage(20);
+            Log.e(TAG, "文件发送成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            mHandler.sendEmptyMessage(30);
+            Log.e(TAG, "文件发送异常");
+        }
+    }
+
 
     public void createSendSocket() {
         try {
@@ -81,6 +118,7 @@ public class NewSendSocket {
             taskbjectOutputStream.flush();
             taskOutStream.flush();
             for (FileBean fileBean : mFileBeanList){
+                Log.i(TAG,"FOR ONCE");
                 OutputStream outputStream = socket.getOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(fileBean);
@@ -101,6 +139,9 @@ public class NewSendSocket {
                     message.what = 10;
                     message.obj = progress;
                     mHandler.sendMessage(message);
+                    if (total==size){
+                        break;
+                    }
                 }
                 outputStream.flush();
                 objectOutputStream.flush();

@@ -181,9 +181,9 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
             Toast.makeText(this, file.getName() + "接收完毕！", Toast.LENGTH_SHORT).show();
         }
         //接收完毕后再次启动服务等待下载一次连接，不启动只能接收一次，第二次无效，原因待尚不清楚
-        clear();
-        startService(mIntent);
-        bindService(mIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+//        clear();
+//        startService(mIntent);
+//        bindService(mIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override

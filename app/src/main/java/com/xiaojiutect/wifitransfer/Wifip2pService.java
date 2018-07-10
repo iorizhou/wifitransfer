@@ -51,7 +51,8 @@ public class Wifip2pService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         mReceiveSocket = new NewReceiveSocket();
-        mReceiveSocket.createServerSocket();
+        mReceiveSocket.bindServerSocket();
+        mReceiveSocket.handleRequest();
         Log.e(TAG, "传输完毕");
     }
 
