@@ -1,11 +1,14 @@
 package com.leon.lfilepickerlibrary.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -26,6 +29,7 @@ import com.leon.lfilepickerlibrary.widget.EmptyRecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LFilePickerActivity extends AppCompatActivity {
@@ -45,7 +49,11 @@ public class LFilePickerActivity extends AppCompatActivity {
     private LFileFilter mFilter;
     private boolean mIsAllSelected = false;
     private Menu mMenu;
+    private HashMap<String,PositionBean> mPosMap = new HashMap<String,PositionBean>();
 
+    public class PositionBean{
+        public int lastOffset,lastPosition;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mParamEntity = (ParamEntity) getIntent().getExtras().getSerializable("param");
@@ -75,9 +83,21 @@ public class LFilePickerActivity extends AppCompatActivity {
         mPathAdapter.setmIconStyle(mParamEntity.getIconStyle());
         mRecylerView.setAdapter(mPathAdapter);
         mRecylerView.setmEmptyView(mEmptyView);
+
         initListener();
     }
-
+    private void getPositionAndOffset(String path) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) mRecylerView.getLayoutManager();
+        //获取可视的第一个view
+        View topView = layoutManager.getChildAt(0);
+        if(topView != null) {
+            //获取与该view的顶部的偏移量
+            PositionBean bean = new PositionBean();
+            bean.lastOffset = topView.getTop();
+            bean.lastPosition = layoutManager.getPosition(topView);
+            mPosMap.put(path,bean);
+        }
+    }
     /**
      * 更新Toolbar展示
      */
@@ -94,6 +114,7 @@ public class LFilePickerActivity extends AppCompatActivity {
         if (mParamEntity.getBackgroundColor() != null) {
             mToolbar.setBackgroundColor(Color.parseColor(mParamEntity.getBackgroundColor()));
         }
+
 //        switch (mParamEntity.getBackIcon()) {
 //            case Constant.BACKICON_STYLEONE:
 //                mToolbar.setNavigationIcon(R.mipmap.lfile_back1);
@@ -125,6 +146,11 @@ public class LFilePickerActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        mTvBack.performClick();
+    }
+
     /**
      * 添加点击事件处理
      */
@@ -135,6 +161,17 @@ public class LFilePickerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String tempPath = new File(mPath).getParent();
                 if (tempPath == null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LFilePickerActivity.this);
+                    builder.setTitle("发送文件");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    });
+                    builder.setMessage("是否确定退出并放弃所选文件?");
+                    builder.setNegativeButton("取消",null);
+                    builder.create().show();
                     return;
                 }
                 mPath = tempPath;
@@ -144,8 +181,12 @@ public class LFilePickerActivity extends AppCompatActivity {
                 mIsAllSelected = false;
                 updateMenuTitle();
 //                mBtnAddBook.setText(getString(R.string.lfile_Selected));
-                mRecylerView.scrollToPosition(0);
+
                 setShowPath(mPath);
+                if(mRecylerView.getLayoutManager() != null && mPosMap.get(mPath)!=null) {
+                    ((LinearLayoutManager) mRecylerView.getLayoutManager()).scrollToPositionWithOffset(mPosMap.get(mPath).lastPosition, mPosMap.get(mPath).lastOffset);
+                }
+
                 //清除添加集合中数据
 //                mListNumbers.clear();
 //                if (mParamEntity.getAddText() != null) {
@@ -155,11 +196,16 @@ public class LFilePickerActivity extends AppCompatActivity {
 //                }
             }
         });
+
+
         mPathAdapter.setOnItemClickListener(new PathAdapter.OnItemClickListener() {
             @Override
             public void click(int position) {
                 if (mParamEntity.isMutilyMode()) {
                     if (mListFiles.get(position).isDirectory()) {
+                        if(mRecylerView.getLayoutManager() != null) {
+                            getPositionAndOffset(mPath);
+                        }
                         //如果当前是目录，则进入继续查看目录
                         chekInDirectory(position);
 //                        mPathAdapter.updateAllSelelcted(false);
