@@ -8,6 +8,9 @@ import android.util.Log;
 import com.xiaojiutect.wifitransfer.FileBean;
 import com.xiaojiutect.wifitransfer.TaskBean;
 import com.xiaojiutect.wifitransfer.TransferInfoBean;
+import com.xiaojiutect.wifitransfer.XiaojiuApplication;
+import com.xiaojiutect.wifitransfer.db.model.HistoryFile;
+import com.xiaojiutect.wifitransfer.db.util.DBUtil;
 import com.xiaojiutect.wifitransfer.utils.FileUtils;
 import com.xiaojiutect.wifitransfer.utils.Md5Util;
 
@@ -124,7 +127,9 @@ public class NewReceiveSocket {
                 } else {
                     mHandler.sendEmptyMessage(70);
                 }
-
+                //add db record
+                HistoryFile dbEntity = new HistoryFile(mFile.getName(),mFile.getAbsolutePath(),System.currentTimeMillis(),1);
+                DBUtil.getInstance(XiaojiuApplication.getInstace()).getDaoSession().getHistoryFileDao().insert(dbEntity);
 //                mServerSocket.close();
                 mInputStream.close();
                 mObjectInputStream.close();

@@ -1,38 +1,40 @@
 package com.xiaojiutect.wifitransfer.mvp.activity;
 
 import android.Manifest;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.xiaojiutect.wifitransfer.R;
+import com.xiaojiutect.wifitransfer.mvp.activity.fragment.FileHistoryRecvFragment;
+import com.xiaojiutect.wifitransfer.mvp.activity.fragment.FileHistorySendFragment;
+import com.xiaojiutect.wifitransfer.mvp.activity.fragment.FunctionFragment;
 
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
+public class MainActivity extends FragmentActivity implements EasyPermissions.PermissionCallbacks{
 
     public static final String TAG = "MainActivity";
+    FragmentTabHost mTabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mTabHost = (FragmentTabHost)findViewById(R.id.tab);
+        mTabHost.setup(this,getSupportFragmentManager(),R.id.content);
+        mTabHost.addTab(mTabHost.newTabSpec("func_tab").setIndicator("文件传送",getResources().getDrawable(R.drawable.ic_launcher_background)), FunctionFragment.class,null);
+        mTabHost.addTab(mTabHost.newTabSpec("file_send_tab").setIndicator("文件发送记录",getResources().getDrawable(R.drawable.ic_launcher_background)), FileHistorySendFragment.class,null);
+        mTabHost.addTab(mTabHost.newTabSpec("file_recv_tab").setIndicator("文件接收记录",getResources().getDrawable(R.drawable.ic_launcher_background)), FileHistoryRecvFragment.class,null);
         requireSomePermission();
     }
 
-    public void sendFile(View v){
-        startActivity(new Intent(this,SendFileActivity.class));
-    }
 
-    public void receiveFile(View v){
-        startActivity(new Intent(this,ReceiveFileActivity.class));
-    }
 
     @AfterPermissionGranted(1000)
     private void requireSomePermission() {

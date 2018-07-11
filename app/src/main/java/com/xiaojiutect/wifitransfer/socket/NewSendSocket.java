@@ -7,6 +7,9 @@ import android.util.Log;
 
 import com.xiaojiutect.wifitransfer.FileBean;
 import com.xiaojiutect.wifitransfer.TaskBean;
+import com.xiaojiutect.wifitransfer.XiaojiuApplication;
+import com.xiaojiutect.wifitransfer.db.model.HistoryFile;
+import com.xiaojiutect.wifitransfer.db.util.DBUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -92,6 +95,9 @@ public class NewSendSocket {
             inputStream.close();
             socket.close();
             mHandler.sendEmptyMessage(20);
+            // add db record
+            HistoryFile dbEntity = new HistoryFile(mFile.getName(),mFile.getAbsolutePath(),System.currentTimeMillis(),0);
+            DBUtil.getInstance(XiaojiuApplication.getInstace()).getDaoSession().getHistoryFileDao().insert(dbEntity);
             Log.e(TAG, "文件发送成功");
         } catch (Exception e) {
             e.printStackTrace();
