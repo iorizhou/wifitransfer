@@ -8,14 +8,14 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context="wifip2p.wifi.com.wifip2p.activity.MainActivity">
-    <com.xiaojiutect.wifitransfer.utils.PullListView
+    <com.xiaojiutech.wifitransfer.utils.PullListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fastScrollEnabled="true"
         android:scrollbars="none"
         android:id="@+id/pullListView"
         >
-    </com.xiaojiutect.wifitransfer.utils.PullListView>
+    </com.xiaojiutech.wifitransfer.utils.PullListView>
 
 
 </RelativeLayout>
