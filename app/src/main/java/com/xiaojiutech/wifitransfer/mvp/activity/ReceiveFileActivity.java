@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.xiaojiutech.wifitransfer.ProgressDialog;
+import com.xiaojiutech.wifitransfer.Wifip2pActionListener;
+import com.xiaojiutech.wifitransfer.Wifip2pReceiver;
 import com.xiaojiutech.wifitransfer.Wifip2pService;
 import com.xiaojiutech.wifitransfer.socket.NewReceiveSocket;
 
@@ -30,7 +32,7 @@ import com.xiaojiutech.wifitransfer.utils.AlertDialogUtil;
  * 2、移除组群信息
  * 3、启动服务，创建serversocket，监听客户端端口，把信息写入文件
  */
-public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocket.ProgressReceiveListener, View.OnClickListener {
+public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocket.ProgressReceiveListener, View.OnClickListener,Wifip2pActionListener {
 
     private static final String TAG = "ReceiveFileActivity";
     private Wifip2pService.MyBinder mBinder;
@@ -78,6 +80,8 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_receive_file);
         btnCreate = (Button) findViewById(R.id.btn_create);
         btnRemove = (Button) findViewById(R.id.btn_remove);
@@ -167,9 +171,16 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
 
     @Override
     public void onProgressChanged(File file, int progress,Boolean mShowErrorTip) {
-        Log.e(TAG, "接收进度：" + progress);
+//        Log.e(TAG, "接收进度：" + progress);
         mProgressDialog.setProgress(progress);
         mProgressDialog.setProgressText("当前接收文件 : "+file.getName() +" \n接收进度: "+progress + "%");
+    }
+
+    @Override
+    public void onDisconnection() {
+//        onFaliure(null,true);
+//        Log.i(TAG,"onDisconnection");
+        super.onDisconnection();
     }
 
     @Override
@@ -191,7 +202,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
             mProgressDialog.dismiss();
         }
         if (mShowErrorTip){
-            Toast.makeText(this, "接收失败，请重试！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "网络连接异常,接收失败，请重试！", Toast.LENGTH_SHORT).show();
         }
     }
 

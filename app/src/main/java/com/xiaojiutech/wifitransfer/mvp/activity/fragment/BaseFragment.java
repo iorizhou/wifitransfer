@@ -10,11 +10,16 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.xiaojiutech.wifitransfer.utils.AdmobConstants;
 
 public class BaseFragment extends Fragment {
     public InterstitialAd mInterstitialAd;
     public AdView mBannerAd;
+    public RewardedVideoAd mVideoAd;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         initInterstitialAd();
@@ -32,5 +37,11 @@ public class BaseFragment extends Fragment {
 //        mBannerAd.setAdSize(AdSize.SMART_BANNER);
         mBannerAd.setAdListener(listener);
         mBannerAd.loadAd(request);
+    }
+
+    public void loadVideoAd(RewardedVideoAdListener listener){
+        mVideoAd = MobileAds.getRewardedVideoAdInstance(getActivity());
+        mVideoAd.setRewardedVideoAdListener(listener);
+        mVideoAd.loadAd(AdmobConstants.REWARDAD,new AdRequest.Builder().build());
     }
 }

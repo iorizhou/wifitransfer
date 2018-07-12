@@ -202,6 +202,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                 public void onFailure(int reason) {
                     Log.e(TAG, "连接失败");
                     Toast.makeText(SendFileActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
+                    mBtnConnectServer.performClick();
                 }
             });
         }
@@ -233,8 +234,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                        if (!file.exists()) {
                            continue;
                        }else {
-                           String md5 = Md5Util.getMd5(file);
-                           FileBean fileBean = new FileBean(file.getPath(), file.length(), md5,FileUtils.getFileNameByPath(file.getPath()),1,1);
+                           FileBean fileBean = new FileBean(file.getPath(), file.length(), "",FileUtils.getFileNameByPath(file.getPath()),1,1);
                            fileBeanList.add(fileBean);
                        }
                    }

@@ -13,6 +13,8 @@ import android.widget.Button;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.mvp.activity.MainActivity;
 import com.xiaojiutech.wifitransfer.mvp.activity.ReceiveFileActivity;
@@ -38,6 +40,7 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         showInterstitialAds();
         loadAndShowBannerAD();
+        showVideoAd();
     }
 
     private void loadAndShowBannerAD(){
@@ -53,6 +56,51 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
+
+    public void showVideoAd(){
+        loadVideoAd(new RewardedVideoAdListener() {
+            @Override
+            public void onRewardedVideoAdLoaded() {
+                mVideoAd.show();
+            }
+
+            @Override
+            public void onRewardedVideoAdOpened() {
+
+            }
+
+            @Override
+            public void onRewardedVideoStarted() {
+                Log.i("admob","onRewardedVideoCompleted");
+            }
+
+            @Override
+            public void onRewardedVideoAdClosed() {
+
+            }
+
+            @Override
+            public void onRewarded(RewardItem rewardItem) {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdLeftApplication() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdFailedToLoad(int i) {
+                Log.i("admob","onRewardedVideoAdFailedToLoad = "+i);
+            }
+
+            @Override
+            public void onRewardedVideoCompleted() {
+                Log.i("admob","onRewardedVideoCompleted");
+            }
+        });
+    }
+
     private void showInterstitialAds(){
         mInterstitialAd.setAdListener(new AdListener(){
             @Override

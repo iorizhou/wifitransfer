@@ -80,62 +80,82 @@ public class NewReceiveSocket {
         }
     }
 
+
+
     public void handleRequest(){
         Socket mSocket;
-        try{
             while (true){
-                mSocket = mServerSocket.accept();
-                Log.e(TAG, "客户端IP地址 : " + mSocket.getRemoteSocketAddress());
-                Log.e(TAG, "客户端IP地址 : " + mSocket.getRemoteSocketAddress());
-                mInputStream = mSocket.getInputStream();
-                mObjectInputStream = new ObjectInputStream(mInputStream);
-                FileBean fileBean = (FileBean) mObjectInputStream.readObject();
-                String name = new File(fileBean.filePath).getName();
-                Log.e(TAG, "客户端传递的文件名称 : " + name);
-                Log.e(TAG, "客户端传递的MD5 : " + fileBean.md5);
-                Log.e(TAG, "文件进度数据 " + fileBean.index +" / "+fileBean.totalCount);
-                mFile = new File(FileUtils.SdCardPath(name));
-                mFileOutputStream = new FileOutputStream(mFile);
-                //开始接收文件
-                mHandler.sendEmptyMessage(40);
-                byte bytes[] = new byte[1024*1024];
-                int len;
-                long total = 0;
-                int progress;
-                while ((len = mInputStream.read(bytes)) != -1) {
-                    mFileOutputStream.write(bytes, 0, len);
-                    total += len;
-                    progress = (int) ((total * 100) / fileBean.fileLength);
-//                    Log.e(TAG, "文件接收进度: " + progress);
-                    Message message = Message.obtain();
-                    message.what = 50;
-//                    TransferInfoBean infoBean = new TransferInfoBean(progress,name,fileBean.index,fileBean.totalCount);
-                    message.obj = progress;
-                    mHandler.sendMessage(message);
-                }
-                //新写入文件的MD5
-                String md5New = Md5Util.getMd5(mFile);
-                //发送过来的MD5
-                String md5Old = fileBean.md5;
-                if (md5New != null || md5Old != null) {
-                    if (md5New.equals(md5Old)) {
-                        mHandler.sendEmptyMessage(60);
-                        Log.e(TAG, "文件接收成功");
+                try{
+                    mSocket = mServerSocket.accept();
+//                    mSocket.setSoTimeout(5);
+                    Log.e(TAG, "客户端IP地址 : " + mSocket.getRemoteSocketAddress());
+                    Log.e(TAG, "客户端IP地址 : " + mSocket.getRemoteSocketAddress());
+                    mInputStream = mSocket.getInputStream();
+                    mObjectInputStream = new ObjectInputStream(mInputStream);
+                    FileBean fileBean = (FileBean) mObjectInputStream.readObject();
+                    String name = new File(fileBean.filePath).getName();
+                    Log.e(TAG, "客户端传递的文件名称 : " + name);
+                    Log.e(TAG, "客户端传递的MD5 : " + fileBean.md5);
+                    Log.e(TAG, "文件进度数据 " + fileBean.index +" / "+fileBean.totalCount);
+                    mFile = new File(FileUtils.SdCardPath(name));
+                    if (mFile.exists()){
+                        mFile.delete();
                     }
-                } else {
-                    mHandler.sendEmptyMessage(70);
-                }
-                //add db record
-                HistoryFile dbEntity = new HistoryFile(mFile.getName(),mFile.getAbsolutePath(),System.currentTimeMillis(),1);
-                DBUtil.getInstance(XiaojiuApplication.getInstace()).getDaoSession().getHistoryFileDao().insert(dbEntity);
+                    mFileOutputStream = new FileOutputStream(mFile);
+                    //开始接收文件
+                    mHandler.sendEmptyMessage(40);
+                    byte bytes[] = new byte[1024*1024];
+                    int len = -1;
+                    long total = 0;
+                    int progress;
+                    while ((len = mInputStream.read(bytes)) != -1) {
+                        mFileOutputStream.write(bytes, 0, len);
+                        total += len;
+                        progress = (int) ((total * 100) / fileBean.fileLength);
+//                    Log.e(TAG, "文件接收进度: " + progress);
+                        Message message = Message.obtain();
+                        message.what = 50;
+//                    TransferInfoBean infoBean = new TransferInfoBean(progress,name,fileBean.index,fileBean.totalCount);
+                        message.obj = progress;
+                        mHandler.sendMessage(message);
+//                        Log.i(TAG,"len = "+len + "socket status = " + mSocket.isInputShutdown());
+                    }
+                    Log.i(TAG,"len = "+len + "socket status = " + mSocket.isConnected());
+//                //新写入文件的MD5
+//                String md5New = Md5Util.getMd5(mFile);
+//                //发送过来的MD5
+//                String md5Old = fileBean.md5;
+//                if (md5New != null || md5Old != null) {
+//                    if (md5New.equals(md5Old)) {
+//                        mHandler.sendEmptyMessage(60);
+//                        Log.e(TAG, "文件接收成功");
+//                    }
+//                } else {
+//                    mHandler.sendEmptyMessage(70);
+//                }
+                    mHandler.sendEmptyMessage(60);
+                    //add db record
+                    HistoryFile dbEntity = new HistoryFile(mFile.getName(),mFile.getAbsolutePath(),System.currentTimeMillis(),1);
+                    DBUtil.getInstance(XiaojiuApplication.getInstace()).getDaoSession().getHistoryFileDao().insert(dbEntity);
 //                mServerSocket.close();
-                mInputStream.close();
-                mObjectInputStream.close();
-                mFileOutputStream.close();
+                    mInputStream.close();
+                    mObjectInputStream.close();
+                    mFileOutputStream.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    mHandler.sendEmptyMessage(70);
+                    Log.e(TAG,"error find "+e.getMessage());
+                    try{
+                        mInputStream.close();
+                        mObjectInputStream.close();
+                        mFileOutputStream.close();
+                    }catch (Exception E1){
+
+                    }
+
+                }
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     public void createServerSocket() {
