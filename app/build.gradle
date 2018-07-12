@@ -30,5 +30,18 @@ dependencies {
     compile project(':filepicker')
 //    compile 'com.leon:lfilepickerlibrary:1.8.0'
     implementation 'org.greenrobot:greendao:3.2.2' // add library
+    compile 'com.google.firebase:firebase-core:15.0.0'
+    implementation 'com.google.firebase:firebase-ads:15.0.0'
+}
+apply plugin: 'com.google.gms.google-services'
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.0'
+            }
+        }
+    }
 }

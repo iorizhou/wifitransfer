@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xiaojiutech.wifitransfer.Wifip2pActionListener;
 import com.xiaojiutech.wifitransfer.Wifip2pReceiver;
 
@@ -19,15 +21,19 @@ import java.util.Collection;
 public class BaseActivity extends AppCompatActivity implements Wifip2pActionListener {
 
     private static final String TAG = "BaseActivity";
-
+    public FirebaseAnalytics mFirebaseAnalytics;
     public WifiP2pManager mWifiP2pManager;
     public WifiP2pManager.Channel mChannel;
     public Wifip2pReceiver mWifip2pReceiver;
     public WifiP2pInfo mWifiP2pInfo;
     public Collection<WifiP2pDevice> mDeviceList;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //google analytics init
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         //注册WifiP2pManager
         mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mWifiP2pManager.initialize(this, getMainLooper(), this);
@@ -41,6 +47,7 @@ public class BaseActivity extends AppCompatActivity implements Wifip2pActionList
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         registerReceiver(mWifip2pReceiver, intentFilter);
     }
+
 
     @Override
     protected void onDestroy() {

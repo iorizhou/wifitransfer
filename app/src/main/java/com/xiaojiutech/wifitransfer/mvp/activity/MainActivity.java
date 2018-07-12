@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.ads.InterstitialAd;
 import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistoryRecvFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistorySendFragment;
@@ -17,7 +18,7 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends FragmentActivity implements EasyPermissions.PermissionCallbacks{
+public class MainActivity extends BaseFragmentActivity implements EasyPermissions.PermissionCallbacks{
 
     public static final String TAG = "MainActivity";
     FragmentTabHost mTabHost;
@@ -33,8 +34,6 @@ public class MainActivity extends FragmentActivity implements EasyPermissions.Pe
         mTabHost.addTab(mTabHost.newTabSpec("file_recv_tab").setIndicator("文件接收记录",getResources().getDrawable(R.drawable.ic_launcher_background)), FileHistoryRecvFragment.class,null);
         requireSomePermission();
     }
-
-
 
     @AfterPermissionGranted(1000)
     private void requireSomePermission() {

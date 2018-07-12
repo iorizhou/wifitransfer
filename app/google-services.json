@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "231261567724",
+    "firebase_url": "https://xiaojiutechwifitransfer.firebaseio.com",
+    "project_id": "xiaojiutechwifitransfer",
+    "storage_bucket": "xiaojiutechwifitransfer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231261567724:android:5008c6fcc5c9ee42",
+        "android_client_info": {
+          "package_name": "com.xiaojiutech.wifitransfer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231261567724-grsakcv0bn57rofe8t72ghlfmi0tg3rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5-hcxppIqoqxcTNB6yOxbkVZs3Cf9gWw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

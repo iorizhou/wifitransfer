@@ -5,10 +5,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    tools:context="wifip2p.wifi.com.wifip2p.activity.MainActivity">
+    >
+<com.google.android.gms.ads.AdView
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/adView"
+    android:layout_gravity="top"
+    ads:adUnitId="ca-app-pub-4536670654281494/8674220650"
+    ads:adSize="BANNER"
+    >
 
+
+</com.google.android.gms.ads.AdView>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
