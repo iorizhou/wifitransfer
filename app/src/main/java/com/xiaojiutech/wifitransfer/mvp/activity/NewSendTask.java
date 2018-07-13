@@ -51,21 +51,21 @@ public class NewSendTask extends AsyncTask<String, Integer, Void> implements New
 
 
     @Override
-    public void onProgressChanged(File file, int progress) {
-        Log.e(TAG, "当前发送文件 : "+file.getName()+"\n发送进度：" + progress);
+    public void onProgressChanged(FileBean file, int progress) {
+        Log.e(TAG, "当前发送文件 : "+file.fileName+"\n发送进度：" + progress);
         mProgressDialog.setProgress(progress);
         mProgressDialog.setProgressText(progress + "%");;
     }
 
     @Override
-    public void onFinished(File file) {
+    public void onFinished(FileBean file) {
         Log.e(TAG, "发送完成");
         mProgressDialog.dismiss();
-        Toast.makeText(mContext, file.getName() + "发送完毕！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, file.fileName + "发送完毕！", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onFaliure(File file) {
+    public void onFaliure(FileBean file) {
         Log.e(TAG, "发送失败");
         if (mProgressDialog!=null){
             mProgressDialog.dismiss();

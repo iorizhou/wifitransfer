@@ -38,21 +38,22 @@ public class NewSendSocket {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            FileBean fileBean = (FileBean)msg.obj;
             switch (msg.what) {
                 case 10:
-                    int progress = (int) msg.obj;
+                    int progress = (int) msg.arg1;
                     if (mlistener != null) {
-                        mlistener.onProgressChanged(mFile, progress);
+                        mlistener.onProgressChanged(fileBean, progress);
                     }
                     break;
                 case 20:
                     if (mlistener != null) {
-                        mlistener.onFinished(mFile);
+                        mlistener.onFinished(fileBean);
                     }
                     break;
                 case 30:
                     if (mlistener != null) {
-                        mlistener.onFaliure(mFile);
+                        mlistener.onFaliure(fileBean);
                     }
                     break;
             }
@@ -87,21 +88,26 @@ public class NewSendSocket {
                 Log.e(TAG, "文件发送进度：" + progress);
                 Message message = Message.obtain();
                 message.what = 10;
-                message.obj = progress;
+                message.arg1 = progress;
+                message.obj = fileBean;
                 mHandler.sendMessage(message);
             }
             outputStream.close();
             objectOutputStream.close();
             inputStream.close();
             socket.close();
-            mHandler.sendEmptyMessage(20);
+            Message finishMsg = mHandler.obtainMessage(20);
+            finishMsg.obj = fileBean;
+            mHandler.sendMessage(finishMsg);
             // add db record
             HistoryFile dbEntity = new HistoryFile(mFile.getName(),mFile.getAbsolutePath(),System.currentTimeMillis(),0);
             DBUtil.getInstance(XiaojiuApplication.getInstace()).getDaoSession().getHistoryFileDao().insert(dbEntity);
             Log.e(TAG, "文件发送成功");
         } catch (Exception e) {
             e.printStackTrace();
-            mHandler.sendEmptyMessage(30);
+            Message failMsg = mHandler.obtainMessage(30);
+            failMsg.obj = fileBean;
+            mHandler.sendMessage(failMsg);
             Log.e(TAG, "文件发送异常");
         }
     }
@@ -173,13 +179,13 @@ public class NewSendSocket {
     public interface ProgressSendListener {
 
         //当传输进度发生变化时
-        void onProgressChanged(File file, int progress);
+        void onProgressChanged(FileBean file, int progress);
 
         //当传输结束时
-        void onFinished(File file);
+        void onFinished(FileBean file);
 
         //传输失败时
-        void onFaliure(File file);
+        void onFaliure(FileBean file);
     }
 }
 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.xiaojiutech.wifitransfer.FileBean;
 import com.xiaojiutech.wifitransfer.ProgressDialog;
 import com.xiaojiutech.wifitransfer.Wifip2pActionListener;
 import com.xiaojiutech.wifitransfer.Wifip2pReceiver;
@@ -170,10 +171,10 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
     }
 
     @Override
-    public void onProgressChanged(File file, int progress,Boolean mShowErrorTip) {
+    public void onProgressChanged(FileBean file, int progress, Boolean mShowErrorTip) {
 //        Log.e(TAG, "接收进度：" + progress);
         mProgressDialog.setProgress(progress);
-        mProgressDialog.setProgressText("当前接收文件 : "+file.getName() +" \n接收进度: "+progress + "%");
+        mProgressDialog.setProgressText("当前接收文件 : "+file.fileName +" \n接收进度: "+progress + "%");
     }
 
     @Override
@@ -184,11 +185,11 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
     }
 
     @Override
-    public void onFinished(File file,Boolean mShowErrorTip) {
+    public void onFinished(FileBean file,Boolean mShowErrorTip) {
         Log.e(TAG, "接收完成");
         mProgressDialog.dismiss();
         if (mShowErrorTip){
-            Toast.makeText(this, file.getName() + "接收完毕！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, file.fileName + "接收完毕！", Toast.LENGTH_SHORT).show();
         }
         //接收完毕后再次启动服务等待下载一次连接，不启动只能接收一次，第二次无效，原因待尚不清楚
 //        clear();
@@ -197,7 +198,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
     }
 
     @Override
-    public void onFaliure(File file,Boolean mShowErrorTip) {
+    public void onFaliure(FileBean file,Boolean mShowErrorTip) {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }

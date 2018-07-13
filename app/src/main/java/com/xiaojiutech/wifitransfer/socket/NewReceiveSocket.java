@@ -43,6 +43,7 @@ public class NewReceiveSocket {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            FileBean fileBean = (FileBean)msg.obj;
             switch (msg.what) {
                 case 40:
                     if (mListener != null) {
@@ -50,19 +51,21 @@ public class NewReceiveSocket {
                     }
                     break;
                 case 50:
-                    int progress = (int) msg.obj;
+                    int progress = (int) msg.arg1;
+
                     if (mListener != null) {
-                        mListener.onProgressChanged(mFile, progress,mShowErrorTip);
+                        mListener.onProgressChanged(fileBean, progress,mShowErrorTip);
                     }
                     break;
                 case 60:
                     if (mListener != null) {
-                        mListener.onFinished(mFile,mShowErrorTip);
+
+                        mListener.onFinished(fileBean,mShowErrorTip);
                     }
                     break;
                 case 70:
                     if (mListener != null) {
-                        mListener.onFaliure(mFile,mShowErrorTip);
+                        mListener.onFaliure(fileBean,mShowErrorTip);
                     }
                     break;
             }
@@ -84,6 +87,7 @@ public class NewReceiveSocket {
 
     public void handleRequest(){
         Socket mSocket;
+        FileBean fileBean = null;
             while (true){
                 try{
                     mSocket = mServerSocket.accept();
@@ -92,7 +96,7 @@ public class NewReceiveSocket {
                     Log.e(TAG, "客户端IP地址 : " + mSocket.getRemoteSocketAddress());
                     mInputStream = mSocket.getInputStream();
                     mObjectInputStream = new ObjectInputStream(mInputStream);
-                    FileBean fileBean = (FileBean) mObjectInputStream.readObject();
+                    fileBean = (FileBean) mObjectInputStream.readObject();
                     String name = new File(fileBean.filePath).getName();
                     Log.e(TAG, "客户端传递的文件名称 : " + name);
                     Log.e(TAG, "客户端传递的MD5 : " + fileBean.md5);
@@ -103,7 +107,9 @@ public class NewReceiveSocket {
                     }
                     mFileOutputStream = new FileOutputStream(mFile);
                     //开始接收文件
-                    mHandler.sendEmptyMessage(40);
+                    Message msg = mHandler.obtainMessage(40);
+                    msg.obj = fileBean;
+                    mHandler.sendMessage(msg);
                     byte bytes[] = new byte[1024*1024];
                     int len = -1;
                     long total = 0;
@@ -115,8 +121,9 @@ public class NewReceiveSocket {
 //                    Log.e(TAG, "文件接收进度: " + progress);
                         Message message = Message.obtain();
                         message.what = 50;
+                        message.arg1 = progress;
 //                    TransferInfoBean infoBean = new TransferInfoBean(progress,name,fileBean.index,fileBean.totalCount);
-                        message.obj = progress;
+                        message.obj = fileBean;
                         mHandler.sendMessage(message);
 //                        Log.i(TAG,"len = "+len + "socket status = " + mSocket.isInputShutdown());
                     }
@@ -133,7 +140,9 @@ public class NewReceiveSocket {
 //                } else {
 //                    mHandler.sendEmptyMessage(70);
 //                }
-                    mHandler.sendEmptyMessage(60);
+                    Message finishMsg = mHandler.obtainMessage(60);
+                    finishMsg.obj = fileBean;
+                    mHandler.sendMessage(finishMsg);
                     //add db record
                     HistoryFile dbEntity = new HistoryFile(mFile.getName(),mFile.getAbsolutePath(),System.currentTimeMillis(),1);
                     DBUtil.getInstance(XiaojiuApplication.getInstace()).getDaoSession().getHistoryFileDao().insert(dbEntity);
@@ -143,7 +152,9 @@ public class NewReceiveSocket {
                     mFileOutputStream.close();
                 }catch (Exception e){
                     e.printStackTrace();
-                    mHandler.sendEmptyMessage(70);
+                    Message failMsg = mHandler.obtainMessage(70);
+                    failMsg.obj = fileBean;
+                    mHandler.sendMessage(failMsg);
                     Log.e(TAG,"error find "+e.getMessage());
                     try{
                         mInputStream.close();
@@ -254,13 +265,13 @@ public class NewReceiveSocket {
         void onSatrt(Boolean showErrorTip);
 
         //当传输进度发生变化时
-        void onProgressChanged(File file, int progress, Boolean showErrorTip);
+        void onProgressChanged(FileBean file, int progress, Boolean showErrorTip);
 
         //当传输结束时
-        void onFinished(File file, Boolean showErrorTip);
+        void onFinished(FileBean file, Boolean showErrorTip);
 
         //传输失败回调
-        void onFaliure(File file, Boolean showErrorTip);
+        void onFaliure(FileBean file, Boolean showErrorTip);
     }
 
     /**
