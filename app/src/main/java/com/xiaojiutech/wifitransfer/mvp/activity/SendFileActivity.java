@@ -54,6 +54,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     private TimerTask mTimerTask;
     Button mBtnConnectServer;
     private CustomProgressDialog mProgressDialog;
+    private int mTaskScheCount;
     private NewSendTask.SendTaskProgressListener mSendProgressListener = new NewSendTask.SendTaskProgressListener() {
         @Override
         public void onPrepared() {
@@ -77,18 +78,26 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         @Override
         public void onProgressChanged(FileBean file, int progress) {
             mProgressDialog.setProgress(progress);
-            mProgressDialog.setMessage(progress + "%");
+            mProgressDialog.setMessage("当前发送文件: "+file.fileName +"\n发送进度:"+progress + "%\n"+"总进度:"+file.index +"/"+file.totalCount);
         }
 
         @Override
         public void onCompleted(FileBean file) {
-            mProgressDialog.dismiss();
-            Toast.makeText(SendFileActivity.this, file.fileName + "发送完毕！", Toast.LENGTH_SHORT).show();
+            mTaskScheCount++;
+            if (mTaskScheCount >= file.totalCount){
+                mProgressDialog.dismiss();
+                Toast.makeText(SendFileActivity.this, file.totalCount + "个文件已成功发送完毕！", Toast.LENGTH_SHORT).show();
+            }
+
+//
         }
 
         @Override
         public void onFailed(FileBean file) {
-            mProgressDialog.dismiss();
+            mTaskScheCount++;
+            if (mTaskScheCount >= file.totalCount){
+                mProgressDialog.dismiss();
+            }
             Toast.makeText(SendFileActivity.this, file.fileName + "发送失败！请稍候重试", Toast.LENGTH_SHORT).show();
         }
     };
@@ -113,6 +122,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                         });
                         return;
                     }
+                    mTaskScheCount = 0;
                     new NewSendTask(SendFileActivity.this, fileBeanList,mSendProgressListener).execute(mWifiP2pInfo.groupOwnerAddress.getHostAddress());
                     break;
             }
@@ -271,17 +281,19 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
            @Override
            public void run() {
                List<FileBean> fileBeanList = new ArrayList<>();
-               for (String path : list){
+               for (int i = 0; i < list.size(); i++) {
+                   String path = list.get(i);
                    if (!TextUtils.isEmpty(path)) {
                        final File file = new File(path);
                        if (!file.exists()) {
                            continue;
                        }else {
-                           FileBean fileBean = new FileBean(file.getPath(), file.length(), "",FileUtils.getFileNameByPath(file.getPath()),1,1);
+                           FileBean fileBean = new FileBean(file.getPath(), file.length(), "",FileUtils.getFileNameByPath(file.getPath()),list.size(),i+1);
                            fileBeanList.add(fileBean);
                        }
                    }
                }
+
                Message msg = mHandler.obtainMessage();
                msg.what = 0;
                msg.obj = fileBeanList;
