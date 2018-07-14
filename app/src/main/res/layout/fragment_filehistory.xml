@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="wifip2p.wifi.com.wifip2p.activity.MainActivity">
+    android:id="@+id/sendFrag"
+    >
     <com.xiaojiutech.wifitransfer.utils.PullListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

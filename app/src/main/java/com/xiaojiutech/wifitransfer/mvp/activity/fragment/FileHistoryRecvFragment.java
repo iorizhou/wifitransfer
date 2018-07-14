@@ -27,6 +27,7 @@ public class FileHistoryRecvFragment extends BaseFragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_filehistory,container,false);
         mListView = (PullListView)view.findViewById(R.id.pullListView);
         return view;
@@ -34,6 +35,7 @@ public class FileHistoryRecvFragment extends BaseFragment{
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mFileDao = DBUtil.getInstance(getActivity()).getDaoSession().getHistoryFileDao();
         mRecvList = getFileList(1);
         mAdapter = new FileListViewAdapter(getActivity(),mRecvList);
@@ -48,7 +50,7 @@ public class FileHistoryRecvFragment extends BaseFragment{
             }
         });
         mAdapter.notifyDataSetChanged();
-        super.onViewCreated(view, savedInstanceState);
+
     }
 
     private List<HistoryFile> getFileList(int type){

@@ -16,7 +16,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.xiaojiutech.wifitransfer.R;
-import com.xiaojiutech.wifitransfer.mvp.activity.MainActivity;
 import com.xiaojiutech.wifitransfer.mvp.activity.ReceiveFileActivity;
 import com.xiaojiutech.wifitransfer.mvp.activity.SendFileActivity;
 
@@ -26,12 +25,14 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_main,container,false);
+        View view = inflater.inflate(R.layout.fragment_function,container,false);
         mSendBtn = (Button)view.findViewById(R.id.sendFile);
         mRecBtn = (Button)view.findViewById(R.id.recFile);
         mSendBtn.setOnClickListener(this);
         mRecBtn.setOnClickListener(this);
         mBannerAd = (AdView)view.findViewById(R.id.adView);
+
+
         return view;
     }
 
@@ -44,6 +45,7 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadAndShowBannerAD(){
+        Log.i("admob","loadAndShowBannerAD");
         loadBannerAd(new AdListener(){
             @Override
             public void onAdLoaded() {

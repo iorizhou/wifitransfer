@@ -3,7 +3,9 @@ package com.xiaojiutech.wifitransfer.mvp.activity.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -20,10 +22,11 @@ public class BaseFragment extends Fragment {
     public AdView mBannerAd;
     public RewardedVideoAd mVideoAd;
 
+    @Nullable
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initInterstitialAd();
-        super.onViewCreated(view, savedInstanceState);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private void  initInterstitialAd(){
