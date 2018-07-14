@@ -18,8 +18,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.leon.lfilepickerlibrary.LFilePicker;
 import com.xiaojiutech.wifitransfer.FileBean;
+import com.xiaojiutech.wifitransfer.utils.CustomProgressDialog;
 import com.xiaojiutech.wifitransfer.utils.FileUtils;
 import com.xiaojiutech.wifitransfer.utils.Md5Util;
 
@@ -51,6 +53,47 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     private Timer mTimer;
     private TimerTask mTimerTask;
     Button mBtnConnectServer;
+    private CustomProgressDialog mProgressDialog;
+    private NewSendTask.SendTaskProgressListener mSendProgressListener = new NewSendTask.SendTaskProgressListener() {
+        @Override
+        public void onPrepared() {
+            //创建进度条
+            mProgressDialog = new CustomProgressDialog(SendFileActivity.this);
+            mProgressDialog.show(SendFileActivity.this,"文件发送准备中...",false,null,new AdListener(){
+                @Override
+                public void onAdLoaded() {
+                    Log.i(TAG,"PROGRESS onAdLoaded");
+                    super.onAdLoaded();
+                }
+
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    Log.i(TAG,"PROGRESS onAdFailedToLoad = "+i);
+                    super.onAdFailedToLoad(i);
+                }
+            });
+        }
+
+        @Override
+        public void onProgressChanged(FileBean file, int progress) {
+            mProgressDialog.setProgress(progress);
+            mProgressDialog.setMessage(progress + "%");
+        }
+
+        @Override
+        public void onCompleted(FileBean file) {
+            mProgressDialog.dismiss();
+            Toast.makeText(SendFileActivity.this, file.fileName + "发送完毕！", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onFailed(FileBean file) {
+            mProgressDialog.dismiss();
+            Toast.makeText(SendFileActivity.this, file.fileName + "发送失败！请稍候重试", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -70,7 +113,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                         });
                         return;
                     }
-                    new NewSendTask(SendFileActivity.this, fileBeanList).execute(mWifiP2pInfo.groupOwnerAddress.getHostAddress());
+                    new NewSendTask(SendFileActivity.this, fileBeanList,mSendProgressListener).execute(mWifiP2pInfo.groupOwnerAddress.getHostAddress());
                     break;
             }
         }

@@ -3,13 +3,20 @@ package com.xiaojiutech.wifitransfer.mvp.activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdView;
 import com.xiaojiutech.wifitransfer.FileBean;
 import com.xiaojiutech.wifitransfer.ProgressDialog;
+import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.socket.NewSendSocket;
+import com.xiaojiutech.wifitransfer.utils.CustomProgressDialog;
 
-import java.io.File;
 import java.util.List;
 
 
@@ -23,21 +30,24 @@ public class NewSendTask extends AsyncTask<String, Integer, Void> implements New
     private static final String TAG = "SendTask";
 
     private List<FileBean> mFileBeanList;
+    private SendTaskProgressListener mListener;
+
     private Context mContext;
     private NewSendSocket mSendSocket;
-    private ProgressDialog mProgressDialog;
 
 
-    public NewSendTask(Context ctx, List<FileBean> fileBeanList) {
+    public NewSendTask(Context ctx, List<FileBean> fileBeanList,SendTaskProgressListener listener) {
         mFileBeanList = fileBeanList;
         mContext = ctx;
+        mListener = listener;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //创建进度条
-        mProgressDialog = new ProgressDialog(mContext);
+        if (mListener!=null){
+            mListener.onPrepared();
+        }
     }
 
     @Override
@@ -53,23 +63,31 @@ public class NewSendTask extends AsyncTask<String, Integer, Void> implements New
     @Override
     public void onProgressChanged(FileBean file, int progress) {
         Log.e(TAG, "当前发送文件 : "+file.fileName+"\n发送进度：" + progress);
-        mProgressDialog.setProgress(progress);
-        mProgressDialog.setProgressText(progress + "%");;
+        if (mListener!=null){
+            mListener.onProgressChanged(file,progress);
+        }
     }
 
     @Override
     public void onFinished(FileBean file) {
         Log.e(TAG, "发送完成");
-        mProgressDialog.dismiss();
-        Toast.makeText(mContext, file.fileName + "发送完毕！", Toast.LENGTH_SHORT).show();
+        if (mListener!=null){
+            mListener.onCompleted(file);
+        }
     }
 
     @Override
     public void onFaliure(FileBean file) {
         Log.e(TAG, "发送失败");
-        if (mProgressDialog!=null){
-            mProgressDialog.dismiss();
+        if (mListener!=null){
+            mListener.onFailed(file);
         }
-        Toast.makeText(mContext, "发送失败，请重试！", Toast.LENGTH_SHORT).show();
+    }
+
+    public interface SendTaskProgressListener{
+        public void onPrepared();
+        public void onProgressChanged(FileBean file, int progress);
+        public void onCompleted(FileBean file);
+        public void onFailed(FileBean file);
     }
 }
