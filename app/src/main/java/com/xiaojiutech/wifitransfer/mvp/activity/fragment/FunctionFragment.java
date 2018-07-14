@@ -21,6 +21,7 @@ import com.xiaojiutech.wifitransfer.mvp.activity.SendFileActivity;
 
 public class FunctionFragment extends BaseFragment implements View.OnClickListener{
     private Button mSendBtn,mRecBtn;
+    public AdView mTopBannerAd,mBottomAd1,mBottomAd2;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,8 +31,9 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
         mRecBtn = (Button)view.findViewById(R.id.recFile);
         mSendBtn.setOnClickListener(this);
         mRecBtn.setOnClickListener(this);
-        mBannerAd = (AdView)view.findViewById(R.id.adView);
-
+        mTopBannerAd = (AdView)view.findViewById(R.id.top_banner_ad);
+        mBottomAd1 = (AdView)view.findViewById(R.id.bottom_banner_ad1);
+        mBottomAd2 = (AdView)view.findViewById(R.id.bottom_banner_ad2);
 
         return view;
     }
@@ -40,23 +42,47 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         showInterstitialAds();
-        loadAndShowBannerAD();
+        showBannerAd();
         showVideoAd();
     }
 
-    private void loadAndShowBannerAD(){
-        Log.i("admob","loadAndShowBannerAD");
+    private void showBannerAd(){
+        Log.i("admob","funtion loadAndShowBannerAD");
         loadBannerAd(new AdListener(){
             @Override
             public void onAdLoaded() {
-                Log.i("banner_ad","loaded");
+                Log.i("admob","function_top_banner_ad loaded");
             }
 
             @Override
             public void onAdFailedToLoad(int i) {
-                Log.i("banner_ad","onAdFailedToLoad = "+i);
+                Log.i("admob","function_top_banner_ad onAdFailedToLoad = "+i);
             }
-        });
+        },mTopBannerAd);
+
+        loadBannerAd(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                Log.i("admob","function_bottom_banner_ad1 loaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.i("admob","function_bottom_banner_ad1 onAdFailedToLoad = "+i);
+            }
+        },mBottomAd1);
+
+        loadBannerAd(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                Log.i("admob","function_bottom_banner_ad2 loaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.i("admob","function_bottom_banner_ad2 onAdFailedToLoad = "+i);
+            }
+        },mBottomAd2);
     }
 
     public void showVideoAd(){

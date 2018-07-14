@@ -19,7 +19,7 @@ import com.xiaojiutech.wifitransfer.utils.AdmobConstants;
 
 public class BaseFragment extends Fragment {
     public InterstitialAd mInterstitialAd;
-    public AdView mBannerAd;
+
     public RewardedVideoAd mVideoAd;
 
     @Nullable
@@ -34,7 +34,7 @@ public class BaseFragment extends Fragment {
         mInterstitialAd.setAdUnitId(AdmobConstants.INTERSTIALAD);
     }
 
-    public void loadBannerAd(AdListener listener){
+    public void loadBannerAd(AdListener listener,AdView mBannerAd){
         AdRequest request = new AdRequest.Builder().build();
 //        mBannerAd.setAdUnitId(AdmobConstants.BANNERAD);
 //        mBannerAd.setAdSize(AdSize.SMART_BANNER);

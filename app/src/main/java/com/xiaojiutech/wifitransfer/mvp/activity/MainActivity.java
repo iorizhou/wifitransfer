@@ -1,18 +1,18 @@
 package com.xiaojiutech.wifitransfer.mvp.activity;
 
 import android.Manifest;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.google.android.gms.ads.InterstitialAd;
 import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.BaseFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistoryRecvFragment;
@@ -31,6 +31,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     private LinearLayout mLayout1,mLayout2,mLayout3;
     private BaseFragment mFuntion,mSend,mRecv;
     FragmentManager mFragmentManager;
+    private long mPressBackTime =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +66,9 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         });
 //        mCurFragment = mFuntion;
 //        mLayout1.performClick();
-        mFragmentManager.beginTransaction().add(R.id.details, mFuntion,"funtion").commitAllowingStateLoss();
+        mFragmentManager.beginTransaction().add(R.id.details, mFuntion,"function").commitAllowingStateLoss();
         mCurFragment = mFuntion;
+        updateDocker();
         requireSomePermission();
     }
 
@@ -94,8 +96,25 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         if (mCurFragment!=null){
             mCurFragment.setUserVisibleHint(true);
         }
+        updateDocker();
     }
 
+
+    public void updateDocker(){
+        if (mCurFragment.getTag().equals("function")){
+            mLayout1.setBackgroundColor(Color.RED);
+            mLayout2.setBackgroundColor(Color.TRANSPARENT);
+            mLayout3.setBackgroundColor(Color.TRANSPARENT);
+        }else if (mCurFragment.getTag().equals("send")){
+            mLayout2.setBackgroundColor(Color.RED);
+            mLayout1.setBackgroundColor(Color.TRANSPARENT);
+            mLayout3.setBackgroundColor(Color.TRANSPARENT);
+        }else if (mCurFragment.getTag().equals("recv")){
+            mLayout3.setBackgroundColor(Color.RED);
+            mLayout1.setBackgroundColor(Color.TRANSPARENT);
+            mLayout2.setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
 
     @AfterPermissionGranted(1000)
     private void requireSomePermission() {
@@ -136,6 +155,25 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     @Override
     public void onPermissionsDenied(int i, @NonNull List<String> list) {
         Log.e(TAG,"权限申请失败");
+    }
+
+
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                long secondTime=System.currentTimeMillis();
+                if(secondTime- mPressBackTime >2000){
+                    Toast.makeText(MainActivity.this,"再按一次back键 退出程序",Toast.LENGTH_SHORT).show();
+                    mPressBackTime =secondTime;
+                    return true;
+                }else{
+                    System.exit(0);
+                }
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
     }
 }
 

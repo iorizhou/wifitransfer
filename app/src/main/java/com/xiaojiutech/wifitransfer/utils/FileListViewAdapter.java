@@ -23,7 +23,9 @@ public class FileListViewAdapter extends BaseAdapter {
         this.mDatas = datas;
     }
 
-
+    public void setDatas(List<HistoryFile> data){
+        this.mDatas = data;
+    }
 
     @Override
     public int getCount() {
