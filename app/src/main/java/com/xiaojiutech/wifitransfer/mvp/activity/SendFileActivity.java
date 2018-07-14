@@ -23,7 +23,6 @@ import com.leon.lfilepickerlibrary.LFilePicker;
 import com.xiaojiutech.wifitransfer.FileBean;
 import com.xiaojiutech.wifitransfer.utils.CustomProgressDialog;
 import com.xiaojiutech.wifitransfer.utils.FileUtils;
-import com.xiaojiutech.wifitransfer.utils.Md5Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,9 +51,11 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     private AlertDialog mDialog;
     private Timer mTimer;
     private TimerTask mTimerTask;
-    Button mBtnConnectServer;
+    private Button mSearchBtn;
+    private Button mBtnChoseFile;
     private CustomProgressDialog mProgressDialog;
     private int mTaskScheCount;
+    private boolean mConnectSuccess;
     private NewSendTask.SendTaskProgressListener mSendProgressListener = new NewSendTask.SendTaskProgressListener() {
         @Override
         public void onPrepared() {
@@ -132,14 +133,14 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_file);
-        Button mBtnChoseFile = (Button) findViewById(R.id.btn_chosefile);
-        mBtnConnectServer = (Button) findViewById(R.id.btn_connectserver);
+        mBtnChoseFile = (Button) findViewById(R.id.btn_chosefile);
+        mSearchBtn = (Button) findViewById(R.id.btn_connectserver);
         mTvDevice = (ListView) findViewById(R.id.lv_device);
 
         mBtnChoseFile.setOnClickListener(this);
-        mBtnConnectServer.setOnClickListener(this);
-        mBtnConnectServer.setVisibility(View.GONE);
-        mBtnConnectServer.performClick();
+        mSearchBtn.setOnClickListener(this);
+        mSearchBtn.setVisibility(View.GONE);
+        mSearchBtn.performClick();
         checkTimeout();
     }
 
@@ -164,7 +165,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                             mDialog = null;
                         }
                         mWifiP2pManager.stopPeerDiscovery(mChannel,null);
-                        mBtnConnectServer.setVisibility(View.VISIBLE);
+                        mSearchBtn.setVisibility(View.VISIBLE);
                         Toast.makeText(SendFileActivity.this,"设备搜索失败，请确保另一台设备与本机连接于同一个WIFI网络环境下",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -177,6 +178,10 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_chosefile:
+                if (!mConnectSuccess){
+                    Toast.makeText(SendFileActivity.this,"当前无设备连接. 请先点击上方设备以完成连接,然后重试",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 selectFile();
                 break;
             case R.id.btn_connectserver:
@@ -208,9 +213,9 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                 Log.e(TAG, "搜索设备成功");
 
                 if (mDeviceList!=null&&mDeviceList.size()>0){
-                    mBtnConnectServer.setVisibility(View.GONE);
+                    mSearchBtn.setVisibility(View.GONE);
                 }else {
-                    mBtnConnectServer.setVisibility(View.VISIBLE);
+                    mSearchBtn.setVisibility(View.VISIBLE);
                     Toast.makeText(SendFileActivity.this,"本次未查找到任何设备，请重试",Toast.LENGTH_SHORT).show();
                 }
 
@@ -230,7 +235,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                     mDialog = null;
                 }
                 mWifiP2pManager.stopPeerDiscovery(mChannel,null);
-                mBtnConnectServer.setVisibility(View.VISIBLE);
+                mSearchBtn.setVisibility(View.VISIBLE);
                 Toast.makeText(SendFileActivity.this,"设备搜索失败，请确保另一台设备与本机连接于同一个WIFI网络环境下",Toast.LENGTH_SHORT).show();
             }
         });
@@ -248,14 +253,16 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                 @Override
                 public void onSuccess() {
                     Log.e(TAG, "连接成功");
+                    mConnectSuccess = true;
                     Toast.makeText(SendFileActivity.this, "连接成功", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(int reason) {
                     Log.e(TAG, "连接失败");
+                    mConnectSuccess = false;
                     Toast.makeText(SendFileActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
-                    mBtnConnectServer.performClick();
+                    mSearchBtn.performClick();
                 }
             });
         }
