@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">file transfer</string>
+    <string name="file_permission_tip">For normal use of APP, APP needs to get file read permission</string>
+    <string name="double_click_exit_app">Then exit the program by one back key</string>
+    <string name="group_create_fail">Group creation failed, please click Create Group button to retry.</string>
+    <string name="end_receive_tip">Do you decide to end and exit?</string>
+    <string name="confirm">sure</string>
+    <string name="cancel">cancel</string>
+    <string name="group_remove_success">Group removal success</string>
+    <string name="group_remove_fail">Remove group group failure, please create group retry</string>
+    <string name="file_recv_preparing">In the preparation of file receiving..</string>
+    <string name="cur_recv_file">Current receiving file: </string>
+    <string name="cur_recv_progress">Receive progress: </string>
+    <string name="total_recv_progress">Total progress: </string>
+    <string name="connection_interupt">The connection is interrupted. Successful reception</string>
+    <string name="count_file"> files</string>
+    <string name="count_file_success"> files has been successfully sent out!</string>
+</resources>

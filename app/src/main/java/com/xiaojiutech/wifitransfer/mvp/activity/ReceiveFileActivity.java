@@ -55,7 +55,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
                         createGroup();
                     }else {
                         btnCreate.setVisibility(View.VISIBLE);
-                        Toast.makeText(ReceiveFileActivity.this,"群组创建失败,请点击 创建群组 按钮重试",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReceiveFileActivity.this,getString(R.string.group_create_fail),Toast.LENGTH_SHORT).show();
                         mGroupCreateRetryCount = 5;
                     }
                     break;
@@ -106,12 +106,12 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
 
                 break;
             case R.id.btn_remove:
-                new AlertDialogUtil(ReceiveFileActivity.this).showAlertDialog(null, "确定结束并退出吗?", "确定", new DialogInterface.OnClickListener() {
+                new AlertDialogUtil(ReceiveFileActivity.this).showAlertDialog(null, getString(R.string.end_receive_tip), getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         onBackPressed();
                     }
-                },"取消",null,true);
+                },getString(R.string.cancel),null,true);
                 break;
         }
     }
@@ -151,7 +151,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
                 public void onSuccess() {
                     Log.e(TAG, "移除组群成功");
                     if (showTipMsg){
-                        Toast.makeText(ReceiveFileActivity.this, "移除组群成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReceiveFileActivity.this, getString(R.string.group_remove_success), Toast.LENGTH_SHORT).show();
                     }
                     btnCreate.setVisibility(View.VISIBLE);
                     btnRemove.setVisibility(View.GONE);
@@ -161,7 +161,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
                 public void onFailure(int reason) {
                     Log.e(TAG, "移除组群失败");
                     if (showTipMsg){
-                        Toast.makeText(ReceiveFileActivity.this, "移除组群失败,请创建组群重试", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReceiveFileActivity.this, getString(R.string.group_remove_fail), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -173,7 +173,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
         if (mProgressDialog == null){
             mTaskScheCount = 0;  //重置count
             mProgressDialog = new CustomProgressDialog(this);
-            mProgressDialog.show(ReceiveFileActivity.this,"文件发送准备中...",false,null,new AdListener(){
+            mProgressDialog.show(ReceiveFileActivity.this,getString(R.string.file_recv_preparing),false,null,new AdListener(){
                 @Override
                 public void onAdLoaded() {
                     Log.i(TAG,"PROGRESS onAdLoaded");
@@ -193,7 +193,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
     public void onProgressChanged(FileBean file, int progress, Boolean mShowErrorTip) {
 //        Log.e(TAG, "接收进度：" + progress);
         mProgressDialog.setProgress(progress);
-        mProgressDialog.setMessage("当前接收文件: "+file.fileName +"\n接收进度:"+progress + "%\n"+"总进度:"+file.index +"/"+file.totalCount);
+        mProgressDialog.setMessage(getString(R.string.cur_recv_file)+file.fileName +"\n"+getString(R.string.cur_recv_progress)+progress + "%\n"+getString(R.string.total_recv_progress)+file.index +"/"+file.totalCount);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
         if (mProgressDialog != null){
             mProgressDialog.dismiss();
             mProgressDialog = null;
-            Toast.makeText(ReceiveFileActivity.this, "连接中断。本次共成功接收 "+mTaskScheCount +" 个文件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ReceiveFileActivity.this, getString(R.string.connection_interupt)+mTaskScheCount +getString(R.string.count_file), Toast.LENGTH_SHORT).show();
         }
         super.onDisconnection();
     }
@@ -214,7 +214,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
         if (mTaskScheCount >= file.totalCount){
             mProgressDialog.dismiss();
             mProgressDialog = null;
-            Toast.makeText(ReceiveFileActivity.this, file.totalCount + "个文件已成功发送完毕！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ReceiveFileActivity.this, file.totalCount + getString(R.string.count_file_success), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -226,7 +226,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
             mProgressDialog = null;
         }
         if (mShowErrorTip){
-            Toast.makeText(ReceiveFileActivity.this, file.fileName + "发送失败！请稍候重试", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ReceiveFileActivity.this, file.fileName +getString(R.string.send_fail), Toast.LENGTH_SHORT).show();
         }
 
     }

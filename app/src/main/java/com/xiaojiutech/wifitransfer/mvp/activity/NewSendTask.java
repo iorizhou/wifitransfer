@@ -27,7 +27,7 @@ import java.util.List;
 
 public class NewSendTask extends AsyncTask<String, Integer, Void> implements NewSendSocket.ProgressSendListener {
 
-    private static final String TAG = "SendTask";
+    private static final String TAG = "NewSendTask";
 
     private List<FileBean> mFileBeanList;
     private SendTaskProgressListener mListener;

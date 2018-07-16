@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">飛鴿傳件</string>
+    <string name="file_permission_tip">為咗APP嘅正常使用，APP需要獲取文件讀取權限</string>
+    <string name="double_click_exit_app">再按一次back鍵 退齣程序</string>
+    <string name="group_create_fail">羣組創建失敗,請點擊 創建羣組 按鈕重試</string>
+    <string name="end_receive_tip">確定結束並退齣哶?</string>
+    <string name="confirm">確定</string>
+    <string name="cancel">取消</string>
+    <string name="group_remove_success">羣組迻除得食</string>
+    <string name="group_remove_fail">迻除組羣失敗,請創建組羣重試</string>
+    <string name="file_recv_preparing">文件接收諗住中..</string>
+    <string name="cur_recv_file">當前接收文件: </string>
+    <string name="cur_recv_progress">接收進度: </string>
+    <string name="total_recv_progress">縂進度: </string>
+    <string name="connection_interupt">連接中斷。本次共得食接收</string>
+    <string name="count_file"> 個文件</string>
+    <string name="count_file_success"> 個文件已得食發送完畢！</string>
+</resources>

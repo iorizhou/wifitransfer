@@ -2,6 +2,7 @@ package com.xiaojiutech.wifitransfer.mvp.activity;
 
 import android.Manifest;
 import android.graphics.Color;
+import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -126,7 +127,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             //有权限
         } else {
             //没权限
-            EasyPermissions.requestPermissions(this, "需要文件读取权限",
+            EasyPermissions.requestPermissions(this, getString(R.string.file_permission_tip),
                     1000, perms);
         }
     }
@@ -165,11 +166,12 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             case KeyEvent.KEYCODE_BACK:
                 long secondTime=System.currentTimeMillis();
                 if(secondTime- mPressBackTime >2000){
-                    Toast.makeText(MainActivity.this,"再按一次back键 退出程序",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,getString(R.string.double_click_exit_app),Toast.LENGTH_SHORT).show();
                     mPressBackTime =secondTime;
                     return true;
                 }else{
-                    System.exit(0);
+                    finish();
+                    android.os.Process.killProcess(Process.myPid());
                 }
                 break;
         }

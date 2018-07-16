@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">飞鸽传件</string>
+    <string name="file_permission_tip">为了APP的正常使用，APP需要获取文件读取权限</string>
+    <string name="double_click_exit_app">再按一次back键 退出程序</string>
+    <string name="group_create_fail">群组创建失败,请点击 创建群组 按钮重试</string>
+    <string name="end_receive_tip">确定结束并退出吗?</string>
+
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+</resources>

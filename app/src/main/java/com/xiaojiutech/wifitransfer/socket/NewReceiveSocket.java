@@ -29,7 +29,7 @@ import java.net.Socket;
 
 public class NewReceiveSocket {
 
-    public static final String TAG = "ReceiveSocket";
+    public static final String TAG = "NewReceiveSocket";
     public static final int PORT = 10000;
     private ServerSocket mServerSocket;
 
@@ -122,7 +122,6 @@ public class NewReceiveSocket {
                         Message message = Message.obtain();
                         message.what = 50;
                         message.arg1 = progress;
-//                    TransferInfoBean infoBean = new TransferInfoBean(progress,name,fileBean.index,fileBean.totalCount);
                         message.obj = fileBean;
                         mHandler.sendMessage(message);
 //                        Log.i(TAG,"len = "+len + "socket status = " + mSocket.isInputShutdown());

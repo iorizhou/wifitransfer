@@ -22,14 +22,14 @@ public class FileUtils {
      * 获取sd卡的路径
      */
     public static String SdCardPath(String name) {
-        String path = Environment.getExternalStorageDirectory() + "/wifip2p";
+        String path = Environment.getExternalStorageDirectory() + "/wifi_transfer";
         File file = new File(path);
         if (file.exists()) {
             if (!file.isDirectory()) {
-                file.mkdir();
+                file.mkdirs();
             }
         } else {
-            file.mkdir();
+            file.mkdirs();
         }
         return path + "/" + name;
     }

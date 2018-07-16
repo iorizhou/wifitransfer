@@ -1,14 +1,18 @@
 package com.xiaojiutech.wifitransfer.mvp.activity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.ads.InterstitialAd;
+
+import java.util.Locale;
 
 public class BaseFragmentActivity extends FragmentActivity {
 
@@ -17,6 +21,4 @@ public class BaseFragmentActivity extends FragmentActivity {
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
     }
-
-
 }

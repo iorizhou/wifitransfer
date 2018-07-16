@@ -28,6 +28,7 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_function,container,false);
         mSendBtn = (Button)view.findViewById(R.id.sendFile);
+        mSendBtn.setText(getResources().getText(R.string.app_name));
         mRecBtn = (Button)view.findViewById(R.id.recFile);
         mSendBtn.setOnClickListener(this);
         mRecBtn.setOnClickListener(this);

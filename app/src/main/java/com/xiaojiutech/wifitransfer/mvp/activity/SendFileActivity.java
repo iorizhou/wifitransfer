@@ -61,7 +61,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         public void onPrepared() {
             //创建进度条
             mProgressDialog = new CustomProgressDialog(SendFileActivity.this);
-            mProgressDialog.show(SendFileActivity.this,"文件发送准备中...",false,null,new AdListener(){
+            mProgressDialog.show(SendFileActivity.this,getString(R.string.file_send_preparing),false,null,new AdListener(){
                 @Override
                 public void onAdLoaded() {
                     Log.i(TAG,"PROGRESS onAdLoaded");
@@ -79,7 +79,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         @Override
         public void onProgressChanged(FileBean file, int progress) {
             mProgressDialog.setProgress(progress);
-            mProgressDialog.setMessage("当前发送文件: "+file.fileName +"\n发送进度:"+progress + "%\n"+"总进度:"+file.index +"/"+file.totalCount);
+            mProgressDialog.setMessage(getString(R.string.cur_send_file)+file.fileName +"\n"+getString(R.string.cur_send_progress)+progress + "%\n"+getString(R.string.total_recv_progress)+file.index +"/"+file.totalCount);
         }
 
         @Override
@@ -87,7 +87,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
             mTaskScheCount++;
             if (mTaskScheCount >= file.totalCount){
                 mProgressDialog.dismiss();
-                Toast.makeText(SendFileActivity.this, file.totalCount + "个文件已成功发送完毕！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SendFileActivity.this, file.totalCount + getString(R.string.count_file_success), Toast.LENGTH_SHORT).show();
             }
 
 //
@@ -99,7 +99,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
             if (mTaskScheCount >= file.totalCount){
                 mProgressDialog.dismiss();
             }
-            Toast.makeText(SendFileActivity.this, file.fileName + "发送失败！请稍候重试", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SendFileActivity.this, file.fileName +getString(R.string.send_fail), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -118,7 +118,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(SendFileActivity.this,"文件不存在或错误，请检查并重试",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SendFileActivity.this,getString(R.string.file_not_exists),Toast.LENGTH_SHORT).show();
                             }
                         });
                         return;
@@ -166,7 +166,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                         }
                         mWifiP2pManager.stopPeerDiscovery(mChannel,null);
                         mSearchBtn.setVisibility(View.VISIBLE);
-                        Toast.makeText(SendFileActivity.this,"设备搜索失败，请确保另一台设备与本机连接于同一个WIFI网络环境下",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SendFileActivity.this,getString(R.string.device_search_error),Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -179,7 +179,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.btn_chosefile:
                 if (!mConnectSuccess){
-                    Toast.makeText(SendFileActivity.this,"当前无设备连接. 请先点击上方设备以完成连接,然后重试",Toast.LENGTH_LONG).show();
+                    Toast.makeText(SendFileActivity.this,getString(R.string.no_device_detect),Toast.LENGTH_LONG).show();
                     return;
                 }
                 selectFile();
@@ -216,7 +216,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                     mSearchBtn.setVisibility(View.GONE);
                 }else {
                     mSearchBtn.setVisibility(View.VISIBLE);
-                    Toast.makeText(SendFileActivity.this,"本次未查找到任何设备，请重试",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SendFileActivity.this,getString(R.string.no_device_found),Toast.LENGTH_SHORT).show();
                 }
 
                 if (mDialog!=null&&mDialog.isShowing()){
@@ -236,7 +236,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                 }
                 mWifiP2pManager.stopPeerDiscovery(mChannel,null);
                 mSearchBtn.setVisibility(View.VISIBLE);
-                Toast.makeText(SendFileActivity.this,"设备搜索失败，请确保另一台设备与本机连接于同一个WIFI网络环境下",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SendFileActivity.this,getString(R.string.device_search_error),Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -254,14 +254,14 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
                 public void onSuccess() {
                     Log.e(TAG, "连接成功");
                     mConnectSuccess = true;
-                    Toast.makeText(SendFileActivity.this, "连接成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SendFileActivity.this, getString(R.string.connect_success), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(int reason) {
                     Log.e(TAG, "连接失败");
                     mConnectSuccess = false;
-                    Toast.makeText(SendFileActivity.this, "连接失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SendFileActivity.this, getString(R.string.connect_failed), Toast.LENGTH_SHORT).show();
                     mSearchBtn.performClick();
                 }
             });
@@ -280,7 +280,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void selectFile(){
-        new LFilePicker().withActivity(SendFileActivity.this).withRequestCode(10).withTitle("多选想要发送的文件").withMutilyMode(true).start();
+        new LFilePicker().withActivity(SendFileActivity.this).withRequestCode(10).withTitle(getString(R.string.select_file_to_send)).withMutilyMode(true).start();
     }
 
     private void handleFileSelect(final List<String> list){
@@ -319,11 +319,11 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
             if (resultCode == RESULT_OK) {
                 List<String> list = data.getStringArrayListExtra("paths");
                 if (list==null||list.size()==0){
-                    Toast.makeText(SendFileActivity.this,"你未选择任何文件",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SendFileActivity.this,getString(R.string.no_file_selected),Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (mWifiP2pInfo == null||mWifiP2pInfo.groupOwnerAddress==null||TextUtils.isEmpty(mWifiP2pInfo.groupOwnerAddress.getHostAddress())){
-                    Toast.makeText(SendFileActivity.this,"未发现可用设备，请确保两台手机连接至同一个Wifi网络",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SendFileActivity.this,getString(R.string.no_available_device),Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showProgressDialog();
@@ -338,7 +338,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
 
         for (WifiP2pDevice device : wifiP2pDeviceList) {
             if (!mListDeviceName.contains(device.deviceName) && !mListDevice.contains(device)) {
-                mListDeviceName.add("设备：" + device.deviceName);
+                mListDeviceName.add(getString(R.string.device) + device.deviceName);
                 mListDevice.add(device);
             }
         }

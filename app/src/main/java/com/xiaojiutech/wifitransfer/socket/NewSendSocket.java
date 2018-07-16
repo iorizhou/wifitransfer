@@ -27,7 +27,7 @@ import java.util.List;
 
 public class NewSendSocket {
 
-    public static final String TAG = "SendSocket";
+    public static final String TAG = "NewSendSocket";
     public static final int PORT = 10000;
     private List<FileBean> mFileBeanList;
     private String mAddress;
