@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.xiaojiutech.wifitransfer.FileBean;
 import com.xiaojiutech.wifitransfer.ProgressDialog;
 import com.xiaojiutech.wifitransfer.Wifip2pActionListener;
@@ -25,6 +26,7 @@ import com.xiaojiutech.wifitransfer.socket.NewReceiveSocket;
 import java.io.File;
 import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.utils.AlertDialogUtil;
+import com.xiaojiutech.wifitransfer.utils.CustomProgressDialog;
 
 
 /**
@@ -37,11 +39,12 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
 
     private static final String TAG = "ReceiveFileActivity";
     private Wifip2pService.MyBinder mBinder;
-    private ProgressDialog mProgressDialog;
+    private CustomProgressDialog mProgressDialog;
     private Intent mIntent;
     Button btnCreate;
     Button btnRemove;
     private int mGroupCreateRetryCount = 5;
+    private int mTaskScheCount;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -167,44 +170,65 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
 
     @Override
     public void onSatrt(Boolean mShowErrorTip) {
-        mProgressDialog = new ProgressDialog(this);
+        if (mProgressDialog == null){
+            mTaskScheCount = 0;  //重置count
+            mProgressDialog = new CustomProgressDialog(this);
+            mProgressDialog.show(ReceiveFileActivity.this,"文件发送准备中...",false,null,new AdListener(){
+                @Override
+                public void onAdLoaded() {
+                    Log.i(TAG,"PROGRESS onAdLoaded");
+                    super.onAdLoaded();
+                }
+
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    Log.i(TAG,"PROGRESS onAdFailedToLoad = "+i);
+                    super.onAdFailedToLoad(i);
+                }
+            });
+        }
     }
 
     @Override
     public void onProgressChanged(FileBean file, int progress, Boolean mShowErrorTip) {
 //        Log.e(TAG, "接收进度：" + progress);
         mProgressDialog.setProgress(progress);
-        mProgressDialog.setProgressText("当前接收文件 : "+file.fileName +" \n接收进度: "+progress + "%");
+        mProgressDialog.setMessage("当前接收文件: "+file.fileName +"\n接收进度:"+progress + "%\n"+"总进度:"+file.index +"/"+file.totalCount);
     }
 
     @Override
     public void onDisconnection() {
 //        onFaliure(null,true);
 //        Log.i(TAG,"onDisconnection");
+        if (mProgressDialog != null){
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+            Toast.makeText(ReceiveFileActivity.this, "连接中断。本次共成功接收 "+mTaskScheCount +" 个文件", Toast.LENGTH_SHORT).show();
+        }
         super.onDisconnection();
     }
 
     @Override
     public void onFinished(FileBean file,Boolean mShowErrorTip) {
-        Log.e(TAG, "接收完成");
-        mProgressDialog.dismiss();
-        if (mShowErrorTip){
-            Toast.makeText(this, file.fileName + "接收完毕！", Toast.LENGTH_SHORT).show();
+        mTaskScheCount++;
+        if (mTaskScheCount >= file.totalCount){
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+            Toast.makeText(ReceiveFileActivity.this, file.totalCount + "个文件已成功发送完毕！", Toast.LENGTH_SHORT).show();
         }
-        //接收完毕后再次启动服务等待下载一次连接，不启动只能接收一次，第二次无效，原因待尚不清楚
-//        clear();
-//        startService(mIntent);
-//        bindService(mIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onFaliure(FileBean file,Boolean mShowErrorTip) {
-        if (mProgressDialog != null) {
+        mTaskScheCount++;
+        if (file!= null && mTaskScheCount >= file.totalCount){
             mProgressDialog.dismiss();
+            mProgressDialog = null;
         }
         if (mShowErrorTip){
-            Toast.makeText(this, "网络连接异常,接收失败，请重试！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ReceiveFileActivity.this, file.fileName + "发送失败！请稍候重试", Toast.LENGTH_SHORT).show();
         }
+
     }
 
 
