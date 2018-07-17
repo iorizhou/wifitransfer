@@ -3,11 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
      >
     <FrameLayout android:id="@+id/details"
         android:layout_width="match_parent" android:layout_height="match_parent"
-        android:background="?android:attr/detailsElementBackground"
+
         android:layout_above="@+id/bottom"
         />
 
@@ -19,7 +18,7 @@
 
         android:id="@+id/bottom"
         android:layout_alignParentBottom="true"
-        android:background="@color/lfile_white"
+        android:background="@color/netease_red"
         android:orientation="horizontal">
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,16 +32,24 @@
             android:paddingBottom="4dp"
             >
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/common_google_signin_btn_icon_dark"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:id="@+id/img1"
+                android:src="@color/netease_white"
+                android:visibility="visible"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 />
             <TextView
+                android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/file_transfer"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/netease_gray"
                 />
         </LinearLayout>
         <LinearLayout
@@ -57,16 +64,24 @@
             android:orientation="vertical"
             >
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/common_google_signin_btn_icon_dark"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:id="@+id/img2"
+                android:src="@color/netease_white"
+                android:visibility="gone"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 />
             <TextView
+                android:id="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/send_record"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/netease_gray"
                 />
         </LinearLayout>
         <LinearLayout
@@ -81,16 +96,24 @@
             android:orientation="vertical"
             >
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/common_google_signin_btn_icon_dark"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:id="@+id/img3"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@color/netease_white"
+                android:visibility="gone"
                 />
             <TextView
+                android:id="@+id/text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/recv_record"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/netease_gray"
                 />
         </LinearLayout>
     </LinearLayout>

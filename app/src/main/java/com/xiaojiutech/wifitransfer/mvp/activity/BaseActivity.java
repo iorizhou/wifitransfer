@@ -5,9 +5,11 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -39,7 +41,7 @@ public class BaseActivity extends AppCompatActivity implements Wifip2pActionList
         //注册WifiP2pManager
         mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mWifiP2pManager.initialize(this, getMainLooper(), this);
-
+//        initState();
         //注册广播
         mWifip2pReceiver = new Wifip2pReceiver(mWifiP2pManager, mChannel, this);
         IntentFilter intentFilter = new IntentFilter();
@@ -48,6 +50,15 @@ public class BaseActivity extends AppCompatActivity implements Wifip2pActionList
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         registerReceiver(mWifip2pReceiver, intentFilter);
+    }
+
+    private void initState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
     }
     public void  initInterstitialAd(){
         mInterstitialAd = new InterstitialAd(this);

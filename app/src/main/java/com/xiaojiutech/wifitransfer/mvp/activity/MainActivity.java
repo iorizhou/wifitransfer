@@ -11,7 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaojiutech.wifitransfer.R;
@@ -33,6 +35,8 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     private BaseFragment mFuntion,mSend,mRecv;
     FragmentManager mFragmentManager;
     private long mPressBackTime =0;
+    private TextView mText1,mText2,mText3;
+    private ImageView mImg1,mImg2,mImg3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,12 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         mLayout1 = (LinearLayout)findViewById(R.id.frag1);
         mLayout2 = (LinearLayout)findViewById(R.id.frag2);
         mLayout3 = (LinearLayout)findViewById(R.id.frag3);
+        mText1 = (TextView)findViewById(R.id.text1);
+        mText2 = (TextView)findViewById(R.id.text2);
+        mText3 = (TextView)findViewById(R.id.text3);
+        mImg1 = (ImageView)findViewById(R.id.img1);
+        mImg2 = (ImageView)findViewById(R.id.img2);
+        mImg3 = (ImageView)findViewById(R.id.img3);
         mFragmentManager = getSupportFragmentManager();
         mFuntion = new FunctionFragment();
         mSend = new FileHistorySendFragment();
@@ -103,17 +113,26 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
 
     public void updateDocker(){
         if (mCurFragment.getTag().equals("function")){
-            mLayout1.setBackgroundColor(Color.RED);
-            mLayout2.setBackgroundColor(Color.TRANSPARENT);
-            mLayout3.setBackgroundColor(Color.TRANSPARENT);
+            mText1.setTextColor(getResources().getColor(R.color.netease_white));
+            mText2.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText3.setTextColor(getResources().getColor(R.color.netease_gray));
+            mImg1.setVisibility(View.VISIBLE);
+            mImg2.setVisibility(View.GONE);
+            mImg3.setVisibility(View.GONE);
         }else if (mCurFragment.getTag().equals("send")){
-            mLayout2.setBackgroundColor(Color.RED);
-            mLayout1.setBackgroundColor(Color.TRANSPARENT);
-            mLayout3.setBackgroundColor(Color.TRANSPARENT);
+            mText2.setTextColor(getResources().getColor(R.color.netease_white));
+            mText1.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText3.setTextColor(getResources().getColor(R.color.netease_gray));
+            mImg2.setVisibility(View.VISIBLE);
+            mImg1.setVisibility(View.GONE);
+            mImg3.setVisibility(View.GONE);
         }else if (mCurFragment.getTag().equals("recv")){
-            mLayout3.setBackgroundColor(Color.RED);
-            mLayout1.setBackgroundColor(Color.TRANSPARENT);
-            mLayout2.setBackgroundColor(Color.TRANSPARENT);
+            mText3.setTextColor(getResources().getColor(R.color.netease_white));
+            mText1.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText2.setTextColor(getResources().getColor(R.color.netease_gray));
+            mImg3.setVisibility(View.VISIBLE);
+            mImg1.setVisibility(View.GONE);
+            mImg2.setVisibility(View.GONE);
         }
     }
 

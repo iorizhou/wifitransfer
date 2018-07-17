@@ -42,7 +42,7 @@ public class FileHistoryRecvFragment extends BaseFragment implements View.OnClic
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_filehistory,container,false);
         mTitle = (TextView)view.findViewById(R.id.title);
-        mTitle.setText("发送记录");
+        mTitle.setText(getString(R.string.recv_record));
         mClearDb = (Button)view.findViewById(R.id.btn_clear_db);
         mClearDb.setOnClickListener(this);
         mListView = (PullListView)view.findViewById(R.id.pullListView);
