@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xiaojiutech.wifitransfer.Wifip2pActionListener;
 import com.xiaojiutech.wifitransfer.Wifip2pReceiver;
+import com.xiaojiutech.wifitransfer.utils.AdmobConstants;
 
 import java.util.Collection;
 
@@ -27,8 +30,7 @@ public class BaseActivity extends AppCompatActivity implements Wifip2pActionList
     public Wifip2pReceiver mWifip2pReceiver;
     public WifiP2pInfo mWifiP2pInfo;
     public Collection<WifiP2pDevice> mDeviceList;
-
-
+    public InterstitialAd mInterstitialAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +49,14 @@ public class BaseActivity extends AppCompatActivity implements Wifip2pActionList
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         registerReceiver(mWifip2pReceiver, intentFilter);
     }
-
-
+    public void  initInterstitialAd(){
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(AdmobConstants.INTERSTIALAD);
+    }
+    public void showInterstitialAds(AdListener listener){
+        mInterstitialAd.setAdListener(listener);
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -96,6 +96,18 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
         startService(mIntent);
         bindService(mIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         createGroup();
+        initInterstitialAd();
+        showInterstitialAds(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdClicked() {
+                super.onAdClicked();
+            }
+        });
     }
 
     @Override
@@ -214,7 +226,15 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
         if (mTaskScheCount >= file.totalCount){
             mProgressDialog.dismiss();
             mProgressDialog = null;
-            Toast.makeText(ReceiveFileActivity.this, file.totalCount + getString(R.string.count_file_success), Toast.LENGTH_SHORT).show();
+            new AlertDialogUtil(ReceiveFileActivity.this).showAlertDialog(getString(R.string.app_name), file.totalCount + getString(R.string.count_file_success) + "\n\n" + getString(R.string.ad_tip), getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (mInterstitialAd.isLoaded()){
+                        mInterstitialAd.show();
+                    }
+                }
+            },null,null,false);
+//            Toast.makeText(ReceiveFileActivity.this, file.totalCount + getString(R.string.count_file_success), Toast.LENGTH_SHORT).show();
         }
     }
 

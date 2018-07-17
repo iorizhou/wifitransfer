@@ -1,5 +1,6 @@
 package com.xiaojiutech.wifitransfer.mvp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -19,8 +20,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
 import com.leon.lfilepickerlibrary.LFilePicker;
 import com.xiaojiutech.wifitransfer.FileBean;
+import com.xiaojiutech.wifitransfer.utils.AlertDialogUtil;
 import com.xiaojiutech.wifitransfer.utils.CustomProgressDialog;
 import com.xiaojiutech.wifitransfer.utils.FileUtils;
 
@@ -56,6 +59,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     private CustomProgressDialog mProgressDialog;
     private int mTaskScheCount;
     private boolean mConnectSuccess;
+
     private NewSendTask.SendTaskProgressListener mSendProgressListener = new NewSendTask.SendTaskProgressListener() {
         @Override
         public void onPrepared() {
@@ -87,7 +91,15 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
             mTaskScheCount++;
             if (mTaskScheCount >= file.totalCount){
                 mProgressDialog.dismiss();
-                Toast.makeText(SendFileActivity.this, file.totalCount + getString(R.string.count_file_success), Toast.LENGTH_SHORT).show();
+                new AlertDialogUtil(SendFileActivity.this).showAlertDialog(getString(R.string.app_name), file.totalCount + getString(R.string.count_file_success) + "\n\n" + getString(R.string.ad_tip), getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (mInterstitialAd.isLoaded()){
+                            mInterstitialAd.show();
+                        }
+                    }
+                },null,null,false);
+//                Toast.makeText(SendFileActivity.this, file.totalCount + getString(R.string.count_file_success), Toast.LENGTH_SHORT).show();
             }
 
 //
@@ -142,7 +154,21 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         mSearchBtn.setVisibility(View.GONE);
         mSearchBtn.performClick();
         checkTimeout();
+        initInterstitialAd();
+        showInterstitialAds(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+            }
+
+            @Override
+            public void onAdClicked() {
+                super.onAdClicked();
+            }
+        });
     }
+
+
 
     private void checkTimeout(){
         if (mTimerTask!=null){
