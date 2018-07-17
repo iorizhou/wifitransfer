@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="wifip2p.wifi.com.wifip2p.activity.SendFileActivity">
+    >
 
 
     <Button
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="查找设备"/>
+        android:text="@string/search_device"/>
 
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:textSize="14sp"
-        android:text="选择需要连接的设备："/>
+        android:text="@string/select_device"/>
 
     <ListView
         android:id="@+id/lv_device"
@@ -35,6 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="选择文件并发送"/>
+        android:text="@string/select_file"/>
 
 </LinearLayout>

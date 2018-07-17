@@ -15,5 +15,5 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        android:text="正在搜索设备，请稍候……"/>
+        android:text="@string/device_searching"/>
 </LinearLayout>

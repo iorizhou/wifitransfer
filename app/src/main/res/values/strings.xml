@@ -52,4 +52,27 @@
     <string name="no_available_device">未发现可用设备，请确保两台手机连接至同一个Wifi网络</string>
 
     <string name="device">设备：</string>
+    <string name="file_transfer">文件传送</string>
+
+    <string name="send_record">发送记录</string>
+
+    <string name="recv_record">接收记录</string>
+
+    <string name="create_group">创建组群</string>
+
+    <string name="end_and_quit">结束并退出</string>
+
+    <string name="search_device">查找设备</string>
+
+    <string name="select_device">选择需要连接的设备：</string>
+
+    <string name="select_file">选择文件并发送</string>
+
+    <string name="clear_record">清空记录</string>
+
+    <string name="wanna_send">我要\n发送文件</string>
+
+    <string name="wanna_recv">我要\n接收文件</string>
+
+    <string name="device_searching">正在搜索设备，请稍候..</string>
 </resources>

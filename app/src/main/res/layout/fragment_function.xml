@@ -29,14 +29,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="我要\n发送文件"
+        android:text="@string/wanna_send"
         android:id="@+id/sendFile"
         android:onClick="sendFile"/>
     <Button
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="我要\n接收文件"
+        android:text="@string/wanna_recv"
         android:layout_below="@+id/sendFile"
         android:layout_marginVertical="30dp"
         android:id="@+id/recFile"

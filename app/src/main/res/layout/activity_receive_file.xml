@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="wifip2p.wifi.com.wifip2p.activity.ReceiveFileActivity">
+    >
 
     <Button
         android:id="@+id/btn_create"
@@ -14,12 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:visibility="gone"
-        android:text="创建组群"/>
+        android:text="@string/create_group"/>
     <Button
         android:id="@+id/btn_remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:visibility="gone"
-        android:text="结束并退出"/>
+        android:text="@string/end_and_quit"/>
 </LinearLayout>
