@@ -8,6 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:id="@+id/sendFrag"
+    android:background="@drawable/main_bg"
     >
     <RelativeLayout
         android:layout_width="match_parent"
