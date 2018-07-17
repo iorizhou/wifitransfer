@@ -14,5 +14,54 @@
     <string name="total_recv_progress">Total progress: </string>
     <string name="connection_interupt">The connection is interrupted. Successful reception</string>
     <string name="count_file"> files</string>
-    <string name="count_file_success"> files has been successfully sent out!</string>
+    <string name="count_file_success"> file has been successfully transferred!</string>
+    <string name="send_fail">Transmission failed! Please try again later.</string>
+
+    <string name="file_send_preparing">File sending preparation...</string>
+
+    <string name="cur_send_file">Current file sending: </string>
+
+    <string name="cur_send_progress">Send progress: </string>
+
+    <string name="file_not_exists">File does not exist or is wrong, please check and try again</string>
+
+    <string name="device_search_error">The device search failed. Please ensure that another device is connected to the same WIFI network environment.</string>
+
+    <string name="no_device_detect">There is currently no device connection. Please click on the device above to complete the connection and try again</string>
+
+    <string name="no_device_found">No equipment found yet, please try again</string>
+
+    <string name="connect_success">connection succeeded</string>
+    <string name="connect_failed">Connection failed</string>
+
+    <string name="select_file_to_send">Multiple selections of the files you want to send</string>
+
+    <string name="no_file_selected">You have not selected any files</string>
+
+    <string name="no_available_device">No available devices found, please make sure that both phones are connected to the same Wifi network</string>
+
+    <string name="device">device：</string>
+    <string name="file_transfer">File transfer</string>
+
+    <string name="send_record">send record</string>
+
+    <string name="recv_record">Receiving record</string>
+
+    <string name="create_group">Create a group</string>
+
+    <string name="end_and_quit">End and exit</string>
+
+    <string name="search_device">Search device</string>
+
+    <string name="select_device">Select the device you want to connect to：</string>
+
+    <string name="select_file">Select file and send</string>
+
+    <string name="clear_record">Clear record</string>
+
+    <string name="wanna_send">I want to \n send files</string>
+
+    <string name="wanna_recv">I want to \n receive the file</string>
+
+    <string name="device_searching">Searching for devices, please wait..</string>
 </resources>

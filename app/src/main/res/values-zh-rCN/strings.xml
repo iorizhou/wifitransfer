@@ -1,10 +1,78 @@
 <resources>
     <string name="app_name">飞鸽传件</string>
-    <string name="file_permission_tip">为了APP的正常使用，APP需要获取文件读取权限</string>
-    <string name="double_click_exit_app">再按一次back键 退出程序</string>
-    <string name="group_create_fail">群组创建失败,请点击 创建群组 按钮重试</string>
-    <string name="end_receive_tip">确定结束并退出吗?</string>
 
+    <string name="file_permission_tip">为了APP的正常使用，APP需要获取文件读取权限</string>
+
+    <string name="double_click_exit_app">再按一次back键 退出程序</string>
+
+    <string name="group_create_fail">群组创建失败,请点击 创建群组 按钮重试</string>
+
+    <string name="end_receive_tip">确定结束并退出吗?</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
+    <string name="group_remove_success">群组移除成功</string>
+
+    <string name="group_remove_fail">移除组群失败,请创建组群重试</string>
+    .
+    <string name="file_recv_preparing">文件接收准备中..</string>
+
+    <string name="cur_recv_file">当前接收文件: </string>
+
+    <string name="cur_recv_progress">接收进度: </string>
+
+    <string name="total_recv_progress">总进度: </string>
+
+    <string name="connection_interupt">连接中断。本次共成功接收</string>
+    <string name="count_file"> 个文件</string>
+    <string name="count_file_success"> 个文件已成功传输完毕！</string>
+
+    <string name="send_fail">传输失败！请稍候重试</string>
+
+    <string name="file_send_preparing">文件发送准备中...</string>
+
+    <string name="cur_send_file">当前发送文件: </string>
+
+    <string name="cur_send_progress">发送进度: </string>
+
+    <string name="file_not_exists">文件不存在或错误，请检查并重试</string>
+
+    <string name="device_search_error">设备搜索失败，请确保另一台设备与本机连接于同一个WIFI网络环境下</string>
+
+    <string name="no_device_detect">当前无设备连接. 请先点击上方设备以完成连接,然后重试</string>
+
+    <string name="no_device_found">本次未查找到任何设备，请重试</string>
+
+    <string name="connect_success">连接成功</string>
+    <string name="connect_failed">连接失败</string>
+
+    <string name="select_file_to_send">多选想要发送的文件</string>
+
+    <string name="no_file_selected">你未选择任何文件</string>
+
+    <string name="no_available_device">未发现可用设备，请确保两台手机连接至同一个Wifi网络</string>
+
+    <string name="device">设备：</string>
+    <string name="file_transfer">文件传送</string>
+
+    <string name="send_record">发送记录</string>
+
+    <string name="recv_record">接收记录</string>
+
+    <string name="create_group">创建组群</string>
+
+    <string name="end_and_quit">结束并退出</string>
+
+    <string name="search_device">查找设备</string>
+
+    <string name="select_device">选择需要连接的设备：</string>
+
+    <string name="select_file">选择文件并发送</string>
+
+    <string name="clear_record">清空记录</string>
+
+    <string name="wanna_send">我要\n发送文件</string>
+
+    <string name="wanna_recv">我要\n接收文件</string>
+
+    <string name="device_searching">正在搜索设备，请稍候..</string>
 </resources>

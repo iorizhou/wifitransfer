@@ -14,5 +14,54 @@
     <string name="total_recv_progress">縂進度: </string>
     <string name="connection_interupt">連接中斷。本次共得食接收</string>
     <string name="count_file"> 個文件</string>
-    <string name="count_file_success"> 個文件已得食發送完畢！</string>
+    <string name="count_file_success"> 個文件已得食傳輸完畢！</string>
+    <string name="send_fail">傳輸失敗！請稍候重試</string>
+
+    <string name="file_send_preparing">文件發送諗住中...</string>
+
+    <string name="cur_send_file">當前發送文件: </string>
+
+    <string name="cur_send_progress">發送進度: </string>
+
+    <string name="file_not_exists">文件唔存喺或錯誤，請檢査並重試</string>
+
+    <string name="device_search_error">設備蒐索失敗，請確保另一臺設備與本機連接于衕一個WIFI網絡環境下</string>
+
+    <string name="no_device_detect">當前冇設備連接. 請先點擊上方設備以完成連接,然之后重試</string>
+
+    <string name="no_device_found">本次未査揾到任何設備，請重試</string>
+
+    <string name="connect_success">連接得食</string>
+    <string name="connect_failed">連接失敗</string>
+
+    <string name="select_file_to_send">多選睺住發送嘅文件</string>
+
+    <string name="no_file_selected">妳未選擇任何文件</string>
+
+    <string name="no_available_device">未發現可用設備，請確保兩臺手機連接至衕一個Wifi網絡</string>
+
+    <string name="device">設備：</string>
+    <string name="file_transfer">文件傳送</string>
+
+    <string name="send_record">發送記錄</string>
+
+    <string name="recv_record">接收記錄</string>
+
+    <string name="create_group">創建組羣</string>
+
+    <string name="end_and_quit">結束並退齣</string>
+
+    <string name="search_device">査揾設備</string>
+
+    <string name="select_device">選擇需要連接嘅設備：</string>
+
+    <string name="select_file">選擇文件並發送</string>
+
+    <string name="clear_record">清空記錄</string>
+
+    <string name="wanna_send">我要\n發送文件</string>
+
+    <string name="wanna_recv">我要\n接收文件</string>
+
+    <string name="device_searching">繫度蒐索設備，請稍候..</string>
 </resources>
