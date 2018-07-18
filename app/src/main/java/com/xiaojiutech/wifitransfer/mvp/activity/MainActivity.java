@@ -1,6 +1,8 @@
 package com.xiaojiutech.wifitransfer.mvp.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Process;
 import android.support.annotation.NonNull;
@@ -8,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,6 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.autoupdatesdk.AppUpdateInfo;
+import com.baidu.autoupdatesdk.AppUpdateInfoForInstall;
+import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
+import com.baidu.autoupdatesdk.CPCheckUpdateCallback;
+import com.baidu.autoupdatesdk.CPUpdateDownloadCallback;
 import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.BaseFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistoryRecvFragment;
@@ -134,6 +143,85 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             mImg1.setVisibility(View.GONE);
             mImg2.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //update check
+        BDAutoUpdateSDK.cpUpdateCheck(this, new BDUpdateCallback(), false);
+    }
+
+    public class BDUpdateCallback implements CPCheckUpdateCallback {
+
+        @Override
+        public void onCheckUpdateCallback(final AppUpdateInfo info, AppUpdateInfoForInstall infoForInstall) {
+            if (infoForInstall != null && !TextUtils.isEmpty(infoForInstall.getInstallPath())) {
+
+                BDAutoUpdateSDK.cpUpdateInstall(MainActivity.this, infoForInstall.getInstallPath());
+            } else if (info != null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                long size = info.getAppPathSize() > 0 ? info.getAppPathSize() : info.getAppSize();
+                builder.setTitle(info.getAppVersionCode() + ", " + byteToMb(size))
+                        .setMessage(Html.fromHtml(info.getAppChangeLog()))
+                        .setNeutralButton("立即升级", null)
+                        .setCancelable(info.getForceUpdate() != 1)
+                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
+                if (info.getForceUpdate() != 1) {
+                    builder.setNegativeButton("暂不升级", null);
+                }
+                AlertDialog dialog = builder.show();
+
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BDAutoUpdateSDK.cpUpdateDownload(MainActivity.this, info, new CPUpdateDownloadCallback(){
+                            @Override
+                            public void onDownloadComplete(String apkPath) {
+                                Log.i("update_check","onDownloadComplete : "+apkPath);
+                                BDAutoUpdateSDK.cpUpdateInstall(getApplicationContext(), apkPath);
+                            }
+
+                            @Override
+                            public void onStart() {
+
+                            }
+
+                            @Override
+                            public void onPercent(int i, long l, long l1) {
+
+                            }
+
+                            @Override
+                            public void onFail(Throwable throwable, String s) {
+
+                            }
+
+                            @Override
+                            public void onStop() {
+
+                            }
+                        });
+                    }
+                });
+            } else {
+                Log.i("update_check","no new version");
+            }
+        }
+
+        private String byteToMb(long fileSize) {
+            float size = ((float) fileSize) / (1024f * 1024f);
+            return String.format("%.2fMB", size);
+        }
+
     }
 
     @AfterPermissionGranted(1000)

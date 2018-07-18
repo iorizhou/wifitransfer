@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/main_bg"
     >
     <RelativeLayout
         android:layout_width="match_parent"
@@ -51,6 +50,9 @@
         android:layout_height="wrap_content"
         android:text="@string/wanna_send"
         android:id="@+id/sendFile"
+        android:textSize="16sp"
+        android:background="@drawable/buttonstyle"
+        android:textColor="@color/netease_white"
         android:onClick="sendFile"/>
     <Button
         android:layout_marginTop="30dp"
@@ -60,6 +62,9 @@
         android:layout_below="@+id/sendFile"
         android:layout_marginVertical="30dp"
         android:id="@+id/recFile"
+        android:textSize="16sp"
+        android:background="@drawable/buttonstyle"
+        android:textColor="@color/netease_white"
         android:onClick="receiveFile"/>
     </RelativeLayout>
     <LinearLayout

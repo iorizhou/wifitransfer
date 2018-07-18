@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
         android:name=".XiaojiuApplication"
         android:allowBackup="true"
@@ -20,6 +21,9 @@
         android:fitsSystemWindows="true"
         android:clipToPadding="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="BDAPPID" android:value="11554285"/>
+        <meta-data android:name="BDAPPKEY" android:value="NvDcyxwvBH1iiVKXaB01N13ZkQ3l6VK2"/>
         <activity android:name=".mvp.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +43,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden">
 
         </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.xiaojiutech.wifitransfer.fileProvider"

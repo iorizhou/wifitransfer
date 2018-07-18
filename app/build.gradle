@@ -7,7 +7,7 @@ android {
         applicationId "com.xiaojiutech.wifitransfer"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
+        versionCode 10
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile(name: 'bd_autoupdate_sdk_release_1_3_1', ext: 'aar')
     implementation 'com.android.support:appcompat-v7:26.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
@@ -32,6 +33,7 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2' // add library
     compile 'com.google.firebase:firebase-core:15.0.0'
     implementation 'com.google.firebase:firebase-ads:15.0.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
 
