@@ -30,6 +30,7 @@ import com.xiaojiutech.wifitransfer.mvp.activity.fragment.BaseFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistoryRecvFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistorySendFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FunctionFragment;
+import com.xiaojiutech.wifitransfer.utils.ActivityHolder;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mLayout1 = (LinearLayout)findViewById(R.id.frag1);
         mLayout2 = (LinearLayout)findViewById(R.id.frag2);

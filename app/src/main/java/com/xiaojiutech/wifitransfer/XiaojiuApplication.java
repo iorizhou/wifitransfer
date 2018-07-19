@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.google.android.gms.ads.MobileAds;
+import com.xiaojiutech.wifitransfer.utils.CrashHandler;
 
 public class XiaojiuApplication extends  Application{
     private static XiaojiuApplication sInstance;
@@ -16,6 +17,7 @@ public class XiaojiuApplication extends  Application{
     public void onCreate() {
         super.onCreate();
         MobileAds.initialize(this, "ca-app-pub-4536670654281494~6611696922");
+        CrashHandler.getInstance().init(getApplicationContext());
         sInstance = this;
     }
 

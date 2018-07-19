@@ -17,6 +17,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xiaojiutech.wifitransfer.Wifip2pActionListener;
 import com.xiaojiutech.wifitransfer.Wifip2pReceiver;
+import com.xiaojiutech.wifitransfer.utils.ActivityHolder;
 import com.xiaojiutech.wifitransfer.utils.AdmobConstants;
 
 import java.util.Collection;
@@ -36,6 +37,7 @@ public class BaseActivity extends AppCompatActivity implements Wifip2pActionList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityHolder.getInstance().addActivity(this);
         //google analytics init
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         //注册WifiP2pManager
@@ -70,6 +72,7 @@ public class BaseActivity extends AppCompatActivity implements Wifip2pActionList
     }
     @Override
     protected void onDestroy() {
+        ActivityHolder.getInstance().removeActivity(this);
         super.onDestroy();
         //注销广播
         unregisterReceiver(mWifip2pReceiver);
