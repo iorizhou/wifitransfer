@@ -32,6 +32,7 @@ dependencies {
 //    compile 'com.leon:lfilepickerlibrary:1.8.0'
     implementation 'org.greenrobot:greendao:3.2.2' // add library
     compile 'com.google.firebase:firebase-core:15.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.google.firebase:firebase-ads:15.0.0'
 
 }
