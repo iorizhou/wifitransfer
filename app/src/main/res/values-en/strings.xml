@@ -65,4 +65,6 @@
 
     <string name="device_searching">Searching for devices, please wait..</string>
     <string name="ad_tip">Personal development of free apps, survival is not easy. \nPlease help click on the ad, thank you..</string>
+    <string name="new_version_tip">APP version upgrade</string>
+    <string name="upgrade_file_error">Sorry, the upgrade file has been corrupted. The upgrade failed. Please try again later.</string>
 </resources>

@@ -65,4 +65,6 @@
 
     <string name="device_searching">繫度蒐索設備，請稍候..</string>
     <string name="ad_tip">個人開發免費APP，生存唔容易。\n請相就點擊廣告，唔該..</string>
+    <string name="new_version_tip">APP版本昇級</string>
+    <string name="upgrade_file_error">抱歉,昇級文件被損燬.昇級失敗,請稍候再試.</string>
 </resources>

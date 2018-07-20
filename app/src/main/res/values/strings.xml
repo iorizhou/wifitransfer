@@ -73,7 +73,8 @@
     <string name="wanna_send">我要\n发送文件</string>
 
     <string name="wanna_recv">我要\n接收文件</string>
-    <string name="new_version_tip">APP有新版本了</string>
+    <string name="new_version_tip">APP版本升级</string>
     <string name="device_searching">正在搜索设备，请稍候..</string>
     <string name="ad_tip">个人开发免费APP，生存不容易。\n请帮忙点击广告，谢谢..</string>
+    <string name="upgrade_file_error">抱歉,升级文件被损毁.升级失败,请稍候再试.</string>
 </resources>

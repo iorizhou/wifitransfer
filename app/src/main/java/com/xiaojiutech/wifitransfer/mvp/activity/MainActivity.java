@@ -34,8 +34,10 @@ import com.xiaojiutech.wifitransfer.utils.AlertDialogUtil;
 import com.xiaojiutech.wifitransfer.utils.AppUtil;
 import com.xiaojiutech.wifitransfer.utils.DownloadTask;
 import com.xiaojiutech.wifitransfer.utils.FileOpenIntentUtil;
+import com.xiaojiutech.wifitransfer.utils.Md5Util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -55,30 +57,25 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     private long mPressBackTime =0;
     private TextView mText1,mText2,mText3;
     private ImageView mImg1,mImg2,mImg3;
+    private String mUpgradeFileMd5;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 99:
                     try{
-                        JSONObject object = new JSONObject();
-                        object.put("versionCode","22");
-                        object.put("isForceUpdate","0");
-                        object.put("description","ddddd");
-                        object.put("apkUrl","http://ucdl.25pp.com/fs01/union_pack/Wandoujia_307597_web_direct_homepage.apk");
-//                        String jsonStr = (String)msg.obj;
-                        String jsonStr = object.toJSONString();
 
+                        String jsonStr = (String)msg.obj;
                         final JSONObject jsonObject = JSONObject.parseObject(jsonStr);
                         if (jsonObject!=null){
                             //取versionCode
                             int version = Integer.parseInt(jsonObject.getString("versionCode"));
                             int curVersion = Integer.parseInt(AppUtil.getVersion());
+                            mUpgradeFileMd5 = jsonObject.getString("md5");
+                            Log.i(TAG,"version = "+version);
                             if (version>curVersion){
-
-
                                 //有新版本
-                                new AlertDialogUtil(MainActivity.this).showAlertDialog(getString(R.string.new_version_tip), jsonObject.getString("description"), getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                new AlertDialogUtil(MainActivity.this).showAlertDialog(getString(R.string.new_version_tip)+ "\nversion:"+jsonObject.getString("version"), jsonObject.getString("description"), getString(R.string.confirm), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
@@ -106,7 +103,18 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
                                                         dialog.dismiss();
                                                     }
                                                 });
-                                                FileOpenIntentUtil.openFile(filepath);
+                                                String fileMd5 = Md5Util.getMd5(new File(filepath));
+                                                if (fileMd5.equals(mUpgradeFileMd5)){
+                                                    FileOpenIntentUtil.openFile(filepath);
+                                                }else {
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Toast.makeText(MainActivity.this,getString(R.string.upgrade_file_error),Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+
                                             }
 
                                             @Override
@@ -123,6 +131,8 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
                                         task.execute(jsonObject.getString("apkUrl"),jsonObject.getString("apkUrl").substring(jsonObject.getString("apkUrl").lastIndexOf("/")+1));
                                     }
                                 },jsonObject.getString("isForceUpdate").equals("0")?"取消":null,null,jsonObject.getString("isForceUpdate").equals("0")?true:false);
+                            }else {
+                                Log.i(TAG,"已是最新版本");
                             }
                         }
                     }catch (Exception e){
@@ -236,8 +246,6 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     @Override
     protected void onResume() {
         super.onResume();
-        //update check
-
     }
 
 
@@ -247,7 +255,8 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             @Override
             public void run() {
                 try{
-                    URL url=new URL("http://wifitransfer.xiaojiutech.com/appupdate/android_"+ AppUtil.getVersion()+"_update.json");
+                    URL url=new URL("http://wifitransfer.xiaojiutech.com/appupgrade/android_"+ AppUtil.getVersion()+"_upgrade.json");
+                    Log.i(TAG,"http://wifitransfer.xiaojiutech.com/appupgrade/android_"+ AppUtil.getVersion()+"_upgrade.json");
                     URLConnection connection=url.openConnection();//获取互联网连接
                     InputStream is=connection.getInputStream();//获取输入流
                     InputStreamReader isr=new InputStreamReader(is,"utf-8");//字节转字符，字符集是utf-8
@@ -255,7 +264,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
                     String line;
                     StringBuilder sb = new StringBuilder("");
                     while ((line=bufferedReader.readLine())!=null){
-                        sb.append(bufferedReader.readLine()+"\n");
+                        sb.append(line);
                     }
                     Message msg = mHandler.obtainMessage(99);
                     msg.obj = sb.toString().trim();
@@ -264,9 +273,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
                     isr.close();
                     is.close();
                 }catch (Exception e){
-                    Message msg = mHandler.obtainMessage(99);
-                    msg.obj = null;
-                    mHandler.sendMessage(msg);
+                    Log.i(TAG,"checkUpdate ERROR: "+e.getMessage());
                     e.printStackTrace();
                 }
             }
