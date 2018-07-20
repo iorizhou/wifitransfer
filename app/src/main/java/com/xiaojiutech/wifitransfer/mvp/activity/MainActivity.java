@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -20,18 +22,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.autoupdatesdk.AppUpdateInfo;
-import com.baidu.autoupdatesdk.AppUpdateInfoForInstall;
-import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
-import com.baidu.autoupdatesdk.CPCheckUpdateCallback;
-import com.baidu.autoupdatesdk.CPUpdateDownloadCallback;
+import com.alibaba.fastjson.JSONObject;
+import com.xiaojiutech.wifitransfer.ProgressDialog;
 import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.BaseFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistoryRecvFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FileHistorySendFragment;
 import com.xiaojiutech.wifitransfer.mvp.activity.fragment.FunctionFragment;
 import com.xiaojiutech.wifitransfer.utils.ActivityHolder;
+import com.xiaojiutech.wifitransfer.utils.AlertDialogUtil;
+import com.xiaojiutech.wifitransfer.utils.AppUtil;
+import com.xiaojiutech.wifitransfer.utils.DownloadTask;
+import com.xiaojiutech.wifitransfer.utils.FileOpenIntentUtil;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -47,6 +55,83 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     private long mPressBackTime =0;
     private TextView mText1,mText2,mText3;
     private ImageView mImg1,mImg2,mImg3;
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 99:
+                    try{
+                        JSONObject object = new JSONObject();
+                        object.put("versionCode","22");
+                        object.put("isForceUpdate","0");
+                        object.put("description","ddddd");
+                        object.put("apkUrl","http://ucdl.25pp.com/fs01/union_pack/Wandoujia_307597_web_direct_homepage.apk");
+//                        String jsonStr = (String)msg.obj;
+                        String jsonStr = object.toJSONString();
+
+                        final JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+                        if (jsonObject!=null){
+                            //取versionCode
+                            int version = Integer.parseInt(jsonObject.getString("versionCode"));
+                            int curVersion = Integer.parseInt(AppUtil.getVersion());
+                            if (version>curVersion){
+
+
+                                //有新版本
+                                new AlertDialogUtil(MainActivity.this).showAlertDialog(getString(R.string.new_version_tip), jsonObject.getString("description"), getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+
+                                        DownloadTask task = new DownloadTask(MainActivity.this, new DownloadTask.DownloadListener() {
+                                            @Override
+                                            public void onProgressChanged(final int progress) {
+                                                Log.i(TAG,"download = "+progress);
+                                               runOnUiThread(new Runnable() {
+                                                   @Override
+                                                   public void run() {
+                                                       dialog.setProgress(progress);
+                                                       dialog.setProgressText(progress+"%");
+                                                   }
+                                               });
+                                            }
+
+                                            @Override
+                                            public void onCompleted(final String filepath) {
+                                                Log.i(TAG,"download complete");
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+                                                FileOpenIntentUtil.openFile(filepath);
+                                            }
+
+                                            @Override
+                                            public void onFailed() {
+                                                Log.i(TAG,"download onFailed");
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        task.execute(jsonObject.getString("apkUrl"),jsonObject.getString("apkUrl").substring(jsonObject.getString("apkUrl").lastIndexOf("/")+1));
+                                    }
+                                },jsonObject.getString("isForceUpdate").equals("0")?"取消":null,null,jsonObject.getString("isForceUpdate").equals("0")?true:false);
+                            }
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +177,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         mCurFragment = mFuntion;
         updateDocker();
         requireSomePermission();
+        checkUpdate();
     }
 
 
@@ -151,80 +237,42 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     protected void onResume() {
         super.onResume();
         //update check
-        BDAutoUpdateSDK.cpUpdateCheck(this, new BDUpdateCallback(), false);
+
     }
 
-    public class BDUpdateCallback implements CPCheckUpdateCallback {
 
-        @Override
-        public void onCheckUpdateCallback(final AppUpdateInfo info, AppUpdateInfoForInstall infoForInstall) {
-            if (infoForInstall != null && !TextUtils.isEmpty(infoForInstall.getInstallPath())) {
-
-                BDAutoUpdateSDK.cpUpdateInstall(MainActivity.this, infoForInstall.getInstallPath());
-            } else if (info != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                long size = info.getAppPathSize() > 0 ? info.getAppPathSize() : info.getAppSize();
-                builder.setTitle(info.getAppVersionCode() + ", " + byteToMb(size))
-                        .setMessage(Html.fromHtml(info.getAppChangeLog()))
-                        .setNeutralButton("立即升级", null)
-                        .setCancelable(info.getForceUpdate() != 1)
-                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                            @Override
-                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                    return true;
-                                }
-                                return false;
-                            }
-                        });
-                if (info.getForceUpdate() != 1) {
-                    builder.setNegativeButton("暂不升级", null);
-                }
-                AlertDialog dialog = builder.show();
-
-                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        BDAutoUpdateSDK.cpUpdateDownload(MainActivity.this, info, new CPUpdateDownloadCallback(){
-                            @Override
-                            public void onDownloadComplete(String apkPath) {
-                                Log.i("update_check","onDownloadComplete : "+apkPath);
-                                BDAutoUpdateSDK.cpUpdateInstall(getApplicationContext(), apkPath);
-                            }
-
-                            @Override
-                            public void onStart() {
-
-                            }
-
-                            @Override
-                            public void onPercent(int i, long l, long l1) {
-
-                            }
-
-                            @Override
-                            public void onFail(Throwable throwable, String s) {
-
-                            }
-
-                            @Override
-                            public void onStop() {
-
-                            }
-                        });
+    private void checkUpdate(){
+        mHandler.removeMessages(99);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    URL url=new URL("http://wifitransfer.xiaojiutech.com/appupdate/android_"+ AppUtil.getVersion()+"_update.json");
+                    URLConnection connection=url.openConnection();//获取互联网连接
+                    InputStream is=connection.getInputStream();//获取输入流
+                    InputStreamReader isr=new InputStreamReader(is,"utf-8");//字节转字符，字符集是utf-8
+                    BufferedReader bufferedReader=new BufferedReader(isr);//通过BufferedReader可以读取一行字符串
+                    String line;
+                    StringBuilder sb = new StringBuilder("");
+                    while ((line=bufferedReader.readLine())!=null){
+                        sb.append(bufferedReader.readLine()+"\n");
                     }
-                });
-            } else {
-                Log.i("update_check","no new version");
+                    Message msg = mHandler.obtainMessage(99);
+                    msg.obj = sb.toString().trim();
+                    mHandler.sendMessage(msg);
+                    bufferedReader.close();
+                    isr.close();
+                    is.close();
+                }catch (Exception e){
+                    Message msg = mHandler.obtainMessage(99);
+                    msg.obj = null;
+                    mHandler.sendMessage(msg);
+                    e.printStackTrace();
+                }
             }
-        }
-
-        private String byteToMb(long fileSize) {
-            float size = ((float) fileSize) / (1024f * 1024f);
-            return String.format("%.2fMB", size);
-        }
-
+        }).start();
     }
+
 
     @AfterPermissionGranted(1000)
     private void requireSomePermission() {

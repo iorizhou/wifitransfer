@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import com.xiaojiutech.wifitransfer.BuildConfig;
 import com.xiaojiutech.wifitransfer.XiaojiuApplication;
@@ -28,6 +29,7 @@ public class FileOpenIntentUtil {
     }
 
     public static String getContentType(String filepath){
+        Log.i("MainActivity","path = "+filepath);
         String result = "";
         filepath = filepath.toLowerCase();
         if (filepath.endsWith(".jpg")||filepath.endsWith(".jpeg")||filepath.endsWith(".png")||filepath.endsWith(".bmp")||filepath.endsWith(".gif")){
@@ -48,7 +50,9 @@ public class FileOpenIntentUtil {
             result = "application/vnd.ms-excel";
         }else if (filepath.endsWith(".ppt")||filepath.endsWith(".pptx")){
             result = "application/vnd.ms-powerpoint";
-        }else {
+        }else if (filepath.endsWith(".apk")){
+            result = "application/vnd.android.package-archive";
+        } else {
             result = "*/*";
         }
         return result;

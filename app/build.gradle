@@ -21,7 +21,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile(name: 'bd_autoupdate_sdk_release_1_3_1', ext: 'aar')
     implementation 'com.android.support:appcompat-v7:26.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
@@ -32,7 +31,7 @@ dependencies {
 //    compile 'com.leon:lfilepickerlibrary:1.8.0'
     implementation 'org.greenrobot:greendao:3.2.2' // add library
     compile 'com.google.firebase:firebase-core:15.0.0'
-    compile 'com.squareup.okhttp3:okhttp:3.11.0'
+    compile 'com.alibaba:fastjson:1.2.47'
     implementation 'com.google.firebase:firebase-ads:15.0.0'
 
 }
