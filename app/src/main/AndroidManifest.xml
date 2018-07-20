@@ -24,7 +24,7 @@
 
         <meta-data android:name="BDAPPID" android:value="11554285"/>
         <meta-data android:name="BDAPPKEY" android:value="NvDcyxwvBH1iiVKXaB01N13ZkQ3l6VK2"/>
-        <activity android:name=".mvp.activity.MainActivity">
+        <activity android:name=".mvp.activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +32,8 @@
             </intent-filter>
         </activity>
         <service android:name=".Wifip2pService"/>
-
+        <activity android:name=".mvp.activity.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name=".mvp.activity.BaseActivity"
             android:configChanges="orientation|screenSize|keyboardHidden">
         </activity>

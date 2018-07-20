@@ -16,7 +16,7 @@ public class XiaojiuApplication extends  Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        MobileAds.initialize(this, "ca-app-pub-4536670654281494~6611696922");
+
         CrashHandler.getInstance().init(getApplicationContext());
         sInstance = this;
     }
