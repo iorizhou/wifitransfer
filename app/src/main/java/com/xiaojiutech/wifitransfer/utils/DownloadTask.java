@@ -31,7 +31,7 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
         try {
             URL url = new URL(sUrl[0]);
             String filename = sUrl[1];
-            File dir = new File(Environment.getExternalStorageDirectory()+"/wifip2p");
+            File dir = new File(Environment.getExternalStorageDirectory()+"/wifitransfer");
             if (!dir.exists()){
                 dir.mkdirs();
             }
