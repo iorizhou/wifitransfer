@@ -33,7 +33,7 @@ dependencies {
     compile 'com.google.firebase:firebase-core:15.0.0'
     compile 'com.alibaba:fastjson:1.2.47'
     implementation 'com.google.firebase:firebase-ads:15.0.0'
-
+    compile 'com.aliyun.dpa:oss-android-sdk:+'
 }
 apply plugin: 'com.google.gms.google-services'
 

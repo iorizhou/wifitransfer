@@ -35,6 +35,7 @@ import com.xiaojiutech.wifitransfer.utils.AppUtil;
 import com.xiaojiutech.wifitransfer.utils.DownloadTask;
 import com.xiaojiutech.wifitransfer.utils.FileOpenIntentUtil;
 import com.xiaojiutech.wifitransfer.utils.Md5Util;
+import com.xiaojiutech.wifitransfer.utils.OSSUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -129,6 +130,57 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
                                             }
                                         });
                                         task.execute(jsonObject.getString("apkUrl"),jsonObject.getString("apkUrl").substring(jsonObject.getString("apkUrl").lastIndexOf("/")+1));
+
+//                                        OSSUtil.getInstance().downloadOSSFile(jsonObject.getString("apkUrl"), new OSSUtil.OSSDownladCallback() {
+//                                            @Override
+//                                            public void onComplete(String url, String localFilePath) {
+//                                                Log.i(TAG,"download complete");
+//                                                runOnUiThread(new Runnable() {
+//                                                    @Override
+//                                                    public void run() {
+//
+//                                                        dialog.dismiss();
+//                                                    }
+//                                                });
+//                                                String fileMd5 = Md5Util.getMd5(new File(localFilePath));
+//                                                if (fileMd5.equals(mUpgradeFileMd5)){
+//                                                    FileOpenIntentUtil.openFile(localFilePath);
+//                                                }else {
+//                                                    runOnUiThread(new Runnable() {
+//                                                        @Override
+//                                                        public void run() {
+//                                                            Toast.makeText(MainActivity.this,getString(R.string.upgrade_file_error),Toast.LENGTH_SHORT).show();
+//                                                        }
+//                                                    });
+//                                                }
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(String url, int errorCode, String errorMsg) {
+//                                                Log.i(TAG,"download onFailed");
+//                                                runOnUiThread(new Runnable() {
+//                                                    @Override
+//                                                    public void run() {
+//                                                        dialog.dismiss();
+//                                                        Toast.makeText(MainActivity.this,getString(R.string.upgrade_file_error),Toast.LENGTH_SHORT).show();
+//                                                    }
+//                                                });
+//                                            }
+//
+//                                            @Override
+//                                            public void onProgress(final int progress) {
+//                                                Log.i(TAG,"download = "+progress);
+//                                                runOnUiThread(new Runnable() {
+//                                                    @Override
+//                                                    public void run() {
+//                                                        dialog.setProgress(progress);
+//                                                        dialog.setProgressText(progress+"%");
+//                                                    }
+//                                                });
+//                                            }
+//                                        });
+
+
                                     }
                                 },jsonObject.getString("isForceUpdate").equals("0")?"取消":null,null,jsonObject.getString("isForceUpdate").equals("0")?true:false);
                             }else {
