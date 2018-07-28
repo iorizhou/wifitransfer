@@ -307,8 +307,8 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             @Override
             public void run() {
                 try{
-                    URL url=new URL("http://wifitransfer.xiaojiutech.com/appupgrade/android_"+ AppUtil.getVersion()+"_upgrade.json");
-                    Log.i(TAG,"http://wifitransfer.xiaojiutech.com/appupgrade/android_"+ AppUtil.getVersion()+"_upgrade.json");
+                    URL url=new URL("http://idc.xiaojiutech.com/wifitransfer/upgrade/android_"+ AppUtil.getVersion()+"_upgrade.json");
+                    Log.i(TAG,"http://idc.xiaojiutech.com/wifitransfer/upgrade/android_"+ AppUtil.getVersion()+"_upgrade.json");
                     URLConnection connection=url.openConnection();//获取互联网连接
                     InputStream is=connection.getInputStream();//获取输入流
                     InputStreamReader isr=new InputStreamReader(is,"utf-8");//字节转字符，字符集是utf-8

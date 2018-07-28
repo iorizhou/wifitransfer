@@ -59,7 +59,7 @@ public class CustomProgressDialog extends Dialog{
         setContentView(R.layout.file_progress_view);
         mTip = (TextView)findViewById(R.id.tip);
         mBannerAd = new AdView(context);
-        mBannerAd.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        mBannerAd.setAdUnitId("ca-app-pub-4536670654281494/8674220650");
         mBannerAd.setAdSize(new AdSize(200,50));
         mProgress = (ProgressBar)findViewById(R.id.progress) ;
         mTip.setText(message);

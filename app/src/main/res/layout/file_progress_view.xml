@@ -23,17 +23,5 @@
         android:paddingTop="10dp"
         />
 
-    <!--
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:id="@+id/progress_banner_ad"
-        android:layout_gravity="top"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        ads:adSize="BANNER"
-        android:layout_marginTop="5dp"
-        />
-        -->
+
 </FrameLayout>

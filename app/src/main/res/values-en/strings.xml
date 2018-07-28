@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">file transfer</string>
+    <string name="app_name">File Transfer</string>
     <string name="file_permission_tip">For normal use of APP, APP needs to get file read permission</string>
     <string name="double_click_exit_app">Then exit the program by one back key</string>
     <string name="group_create_fail">Group creation failed, please click Create Group button to retry.</string>

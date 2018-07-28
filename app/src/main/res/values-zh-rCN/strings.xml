@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">飞鸽传件</string>
+    <string name="app_name">飞鸽快传</string>
 
     <string name="file_permission_tip">为了APP的正常使用，APP需要获取文件读取权限</string>
 

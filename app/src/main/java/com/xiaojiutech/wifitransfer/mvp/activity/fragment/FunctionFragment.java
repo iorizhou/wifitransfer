@@ -45,7 +45,7 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         showInterstitialAds();
         showBannerAd();
-//        showVideoAd();
+        showVideoAd();
     }
 
     private void showBannerAd(){

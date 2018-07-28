@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">飛鴿傳件</string>
+    <string name="app_name">飛鴿快傳</string>
     <string name="file_permission_tip">為咗APP嘅正常使用，APP需要獲取文件讀取權限</string>
     <string name="double_click_exit_app">再按一次back鍵 退齣程序</string>
     <string name="group_create_fail">羣組創建失敗,請點擊 創建羣組 按鈕重試</string>
