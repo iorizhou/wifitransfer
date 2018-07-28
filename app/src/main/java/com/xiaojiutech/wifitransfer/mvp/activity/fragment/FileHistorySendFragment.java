@@ -90,7 +90,7 @@ public class FileHistorySendFragment extends BaseFragment implements View.OnClic
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HistoryFile file = mSendList.get(i);
+                HistoryFile file = mSendList.get(i-1);
                 if (file!=null){
                     FileOpenIntentUtil.openFile(file.getPath());
                 }

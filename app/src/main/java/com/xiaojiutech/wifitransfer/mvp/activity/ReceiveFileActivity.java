@@ -242,11 +242,15 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
     public void onFaliure(FileBean file,Boolean mShowErrorTip) {
         mTaskScheCount++;
         if (file!= null && mTaskScheCount >= file.totalCount){
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
+            if (mProgressDialog != null){
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
         }
         if (mShowErrorTip){
-            Toast.makeText(ReceiveFileActivity.this, file.fileName +getString(R.string.send_fail), Toast.LENGTH_SHORT).show();
+            if (file != null && file.fileName != null){
+                Toast.makeText(ReceiveFileActivity.this, file.fileName +getString(R.string.send_fail), Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

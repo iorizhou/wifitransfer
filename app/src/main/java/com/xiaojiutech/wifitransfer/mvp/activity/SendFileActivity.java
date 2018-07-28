@@ -121,9 +121,14 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         public void onFailed(FileBean file) {
             mTaskScheCount++;
             if (mTaskScheCount >= file.totalCount){
-                mProgressDialog.dismiss();
+                if (mProgressDialog != null){
+                    mProgressDialog.dismiss();
+                    mProgressDialog = null;
+                }
             }
-            Toast.makeText(SendFileActivity.this, file.fileName +getString(R.string.send_fail), Toast.LENGTH_SHORT).show();
+           if (file != null && file.fileName != null){
+               Toast.makeText(SendFileActivity.this, file.fileName +getString(R.string.send_fail), Toast.LENGTH_SHORT).show();
+           }
         }
     };
 

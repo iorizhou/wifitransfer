@@ -63,10 +63,10 @@ public class PullListView extends ListView {
             // 并且这两个属性都是Drawable类型
             Class < ? > cc = (Class < ? > ) Class.forName(egtObject.getClass()
                     .getName());
-            Field mGlow = cc.getDeclaredField("mGlow");
-            mGlow.setAccessible(true);
-            mGlow.set(egtObject, new ColorDrawable(Color.TRANSPARENT));
-            mGlow.set(egbObject, new ColorDrawable(Color.TRANSPARENT));
+//            Field mGlow = cc.getDeclaredField("mGlow");
+//            mGlow.setAccessible(true);
+//            mGlow.set(egtObject, new ColorDrawable(Color.TRANSPARENT));
+//            mGlow.set(egbObject, new ColorDrawable(Color.TRANSPARENT));
 
             Field mEdge = cc.getDeclaredField("mEdge");
             mEdge.setAccessible(true);

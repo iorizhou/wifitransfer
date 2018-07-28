@@ -150,11 +150,11 @@ public class NewReceiveSocket {
                     mObjectInputStream.close();
                     mFileOutputStream.close();
                 }catch (Exception e){
-                    e.printStackTrace();
+//                    e.printStackTrace();
                     Message failMsg = mHandler.obtainMessage(70);
                     failMsg.obj = fileBean;
                     mHandler.sendMessage(failMsg);
-                    Log.e(TAG,"error find "+e.getMessage());
+//                    Log.e(TAG,"error find "+e.getMessage());
                     try{
                         mInputStream.close();
                         mObjectInputStream.close();

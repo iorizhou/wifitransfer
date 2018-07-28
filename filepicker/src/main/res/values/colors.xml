@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="lfile_colorPrimary">#92B4F4</color>
-    <color name="lfile_colorPrimaryDark">#92B4F4</color>
-    <color name="lfile_colorAccent">#92B4F4</color>
-    <color name="lfile_gray">#cccccc</color>
-    <color name="lfile_lightgray">#dddddd</color>
+    <color name="lfile_colorPrimary">#de4137</color>
+    <color name="lfile_colorPrimaryDark">#de4137</color>
+    <color name="lfile_colorAccent">#de4137</color>
+    <color name="lfile_gray">#ffffff</color>
+    <color name="lfile_lightgray">#ffffff</color>
     <color name="lfile_white">#fff</color>
-    <color name="lfile_defaultColor">#92B4F4</color>
+    <color name="lfile_defaultColor">#de4137</color>
 </resources>
