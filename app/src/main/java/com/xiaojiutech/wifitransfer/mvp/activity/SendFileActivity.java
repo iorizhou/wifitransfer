@@ -20,9 +20,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.leon.lfilepickerlibrary.LFilePicker;
 import com.xiaojiutech.wifitransfer.FileBean;
+import com.xiaojiutech.wifitransfer.utils.AdmobConstants;
 import com.xiaojiutech.wifitransfer.utils.AlertDialogUtil;
 import com.xiaojiutech.wifitransfer.utils.CustomProgressDialog;
 import com.xiaojiutech.wifitransfer.utils.FileUtils;
@@ -59,6 +65,12 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
     private CustomProgressDialog mProgressDialog;
     private int mTaskScheCount;
     private boolean mConnectSuccess;
+    public RewardedVideoAd mVideoAd;
+    public void loadVideoAd(RewardedVideoAdListener listener){
+        mVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mVideoAd.setRewardedVideoAdListener(listener);
+        mVideoAd.loadAd(AdmobConstants.REWARDAD,new AdRequest.Builder().build());
+    }
 
     private NewSendTask.SendTaskProgressListener mSendProgressListener = new NewSendTask.SendTaskProgressListener() {
         @Override
@@ -91,7 +103,7 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
             mTaskScheCount++;
             if (mTaskScheCount >= file.totalCount){
                 mProgressDialog.dismiss();
-                new AlertDialogUtil(SendFileActivity.this).showAlertDialog(getString(R.string.app_name), file.totalCount + getString(R.string.count_file_success) + "\n\n" + getString(R.string.ad_tip), getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                new AlertDialogUtil(SendFileActivity.this).showAlertDialog(getString(R.string.app_name), file.totalCount + getString(R.string.count_file_success) , getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (mInterstitialAd.isLoaded()){
@@ -154,6 +166,47 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
         mSearchBtn.setVisibility(View.GONE);
         mSearchBtn.performClick();
         checkTimeout();
+        loadVideoAd(new RewardedVideoAdListener() {
+            @Override
+            public void onRewardedVideoAdLoaded() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdOpened() {
+
+            }
+
+            @Override
+            public void onRewardedVideoStarted() {
+                Log.i("admob","onRewardedVideoCompleted");
+            }
+
+            @Override
+            public void onRewardedVideoAdClosed() {
+
+            }
+
+            @Override
+            public void onRewarded(RewardItem rewardItem) {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdLeftApplication() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdFailedToLoad(int i) {
+                Log.i("admob","onRewardedVideoAdFailedToLoad = "+i);
+            }
+
+            @Override
+            public void onRewardedVideoCompleted() {
+                Log.i("admob","onRewardedVideoCompleted");
+            }
+        });
         initInterstitialAd();
         showInterstitialAds(new AdListener(){
             @Override
@@ -307,6 +360,9 @@ public class SendFileActivity extends BaseActivity implements View.OnClickListen
 
     private void selectFile(){
         new LFilePicker().withActivity(SendFileActivity.this).withRequestCode(10).withTitle(getString(R.string.select_file_to_send)).withMutilyMode(true).start();
+        if (mVideoAd.isLoaded()){
+            mVideoAd.show();
+        }
     }
 
     private void handleFileSelect(final List<String> list){

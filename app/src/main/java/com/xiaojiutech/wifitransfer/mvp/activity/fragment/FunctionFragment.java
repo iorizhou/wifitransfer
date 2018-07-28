@@ -19,6 +19,8 @@ import com.xiaojiutech.wifitransfer.R;
 import com.xiaojiutech.wifitransfer.mvp.activity.ReceiveFileActivity;
 import com.xiaojiutech.wifitransfer.mvp.activity.SendFileActivity;
 
+import static com.xiaojiutech.wifitransfer.mvp.activity.MainActivity.TAG;
+
 public class FunctionFragment extends BaseFragment implements View.OnClickListener{
     private Button mSendBtn,mRecBtn;
     public AdView mTopBannerAd,mBottomAd1,mBottomAd2;
@@ -43,7 +45,7 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         showInterstitialAds();
         showBannerAd();
-        showVideoAd();
+//        showVideoAd();
     }
 
     private void showBannerAd(){
@@ -83,6 +85,15 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
                 Log.i("admob","function_bottom_banner_ad2 onAdFailedToLoad = "+i);
             }
         },mBottomAd2);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mInterstitialAd.isLoaded()){
+            Log.i(TAG,"show interad");
+            mInterstitialAd.show();
+        }
     }
 
     public void showVideoAd(){
@@ -134,7 +145,7 @@ public class FunctionFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
-                mInterstitialAd.show();
+
             }
 
             @Override

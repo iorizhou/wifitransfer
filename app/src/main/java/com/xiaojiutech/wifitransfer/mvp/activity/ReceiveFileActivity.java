@@ -226,7 +226,7 @@ public class ReceiveFileActivity extends BaseActivity implements NewReceiveSocke
         if (mTaskScheCount >= file.totalCount){
             mProgressDialog.dismiss();
             mProgressDialog = null;
-            new AlertDialogUtil(ReceiveFileActivity.this).showAlertDialog(getString(R.string.app_name), file.totalCount + getString(R.string.count_file_success) + "\n\n" + getString(R.string.ad_tip), getString(R.string.confirm), new DialogInterface.OnClickListener() {
+            new AlertDialogUtil(ReceiveFileActivity.this).showAlertDialog(getString(R.string.app_name), file.totalCount + getString(R.string.count_file_success), getString(R.string.confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (mInterstitialAd.isLoaded()){
