@@ -46,8 +46,8 @@ public class FileHistoryRecvFragment extends BaseFragment implements View.OnClic
         mClearDb = (Button)view.findViewById(R.id.btn_clear_db);
         mClearDb.setOnClickListener(this);
         mListView = (PullListView)view.findViewById(R.id.pullListView);
-        mHeaderView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
-        mFooterView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
+        mHeaderView = inflater.inflate(R.layout.recv_fragment_listview_headerview,null,false);
+        mFooterView = inflater.inflate(R.layout.recv_fragment_listview_footerview,null,false);
         mTopBannerAd = mHeaderView.findViewById(R.id.top_banner_ad);
         mFooterBannerAd = mFooterView.findViewById(R.id.top_banner_ad);
         mListView.addHeaderView(mHeaderView);

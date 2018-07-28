@@ -47,7 +47,7 @@ public class FileHistorySendFragment extends BaseFragment implements View.OnClic
         mClearDb.setOnClickListener(this);
         mListView = (PullListView)view.findViewById(R.id.pullListView);
         mHeaderView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
-        mFooterView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
+        mFooterView = inflater.inflate(R.layout.send_fragment_listview_footerview,null,false);
         mTopBannerAd = mHeaderView.findViewById(R.id.top_banner_ad);
         mFooterBannerAd = mFooterView.findViewById(R.id.top_banner_ad);
         mListView.addHeaderView(mHeaderView);

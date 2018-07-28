@@ -71,7 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="8dp"
+        android:paddingBottom="25dp"
         android:id="@+id/bottom_ad_layout"
         android:orientation="vertical"
         >
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/bottom_banner_ad1"
         android:layout_gravity="top"
-        ads:adUnitId="ca-app-pub-4536670654281494/8674220650"
+        ads:adUnitId="ca-app-pub-4536670654281494/9279425546"
         ads:adSize="BANNER"
         />
     <com.google.android.gms.ads.AdView
@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/bottom_banner_ad2"
         android:layout_gravity="top"
-        ads:adUnitId="ca-app-pub-4536670654281494/8674220650"
+        ads:adUnitId="ca-app-pub-4536670654281494/2111381967"
         ads:adSize="SMART_BANNER"
         />
     </LinearLayout>
